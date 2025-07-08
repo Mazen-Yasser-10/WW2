@@ -8,6 +8,9 @@ Route::get('/', function () {
 })->name('home');
 
 
+Route::get('qr/bulk', [\App\Http\Controllers\QrCodeController::class, 'convertCsvToQr'])
+    ->name('qr.bulk')
+    ->middleware(['auth', 'verified']);
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
