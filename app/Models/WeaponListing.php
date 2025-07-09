@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class cart extends Model
+class WeaponListing extends Model
 {
-    public function user()
+    public function weapon()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Weapon::class);
     }
 
     public function orders()

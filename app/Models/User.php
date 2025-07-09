@@ -35,6 +35,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\Cart;
-use App\Models\WeaponListings;
+use App\Models\WeaponListing;
 
 return new class extends Migration
 {
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Cart::class)
                 ->constrained()
                 ->onDelete('cascade');
-            $table->foreignIdFor(WeaponListings::class)
+            $table->foreignIdFor(WeaponListing::class)
                 ->constrained()
                 ->onDelete('cascade');
             $table->integer('quantity')->default(1);
