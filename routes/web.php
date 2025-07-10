@@ -2,12 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
+use App\Http\Controllers\QrCodeController;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-
+Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
+    ->middleware(['auth','verified'])
+    ->name('emails.qr');
 Route::get('qr/bulk', [\App\Http\Controllers\QrCodeController::class, 'convertCsvToQr'])
     ->name('qr.bulk')
     ->middleware(['auth', 'verified']);
