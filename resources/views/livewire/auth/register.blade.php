@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Country;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,8 +12,16 @@ use Livewire\Volt\Component;
 new #[Layout('components.layouts.auth')] class extends Component {
     public string $name = '';
     public string $email = '';
+    public string $country_id = '';
     public string $password = '';
     public string $password_confirmation = '';
+
+    public function with(): array
+    {
+        return [
+            'countries' => Country::orderBy('name')->get(),
+        ];
+    }
 
     /**
      * Handle an incoming registration request.
@@ -22,6 +31,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'country_id' => ['required', 'exists:countries,id'],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -62,6 +72,18 @@ new #[Layout('components.layouts.auth')] class extends Component {
             autocomplete="email"
             placeholder="email@example.com"
         />
+
+        <!-- Country -->
+        <flux:select
+            wire:model="country_id"
+            :label="__('Country')"
+            placeholder="Select your country"
+            required
+        >
+            @foreach($countries as $country)
+                <option value="{{ $country->id }}">{{ $country->name }}</option>
+            @endforeach
+        </flux:select>
 
         <!-- Password -->
         <flux:input

@@ -1,31 +1,27 @@
-<?php 
+<?php
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class QRgenerator
 {
-    public function fromCsv(string $csvPath): array
+    public function fromCsv(string $csvPath): string
     {
+        
         $data = array_map('str_getcsv', file($csvPath));
         $headers = array_shift($data);
 
-        $qrCodes = [];
-
+        $text = "CSV Users:\n";
         foreach ($data as $row) {
             $user = array_combine($headers, $row);
-
-            $text = "Name: {$user['name']}, Email: {$user['email']}";
-            $qrImage = QrCode::format('svg')->size(200)->generate($text);
-            $base64 = 'data:image/svg+xml;base64,' . base64_encode($qrImage);
-
-            $qrCodes[] = [
-                'user' => $user,
-                'qr' => $base64
-            ];
+            $text .= "Name: {$user['name']}, Email: {$user['email']}\n";
         }
 
-        return $qrCodes;
+        $qrImage = QrCode::format('png')->size(300)->generate($text);
+        Storage::disk('public')->put('qrcode.png', $qrImage);
+        $filename = 'app/public/qrcode.png';
+        return $filename;
     }
 }
