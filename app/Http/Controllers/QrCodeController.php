@@ -13,7 +13,7 @@ class QrCodeController extends Controller
     {
         $path = storage_path('app/public/stock.csv');
         $qrCodeUrl = $qrgenerator->fromCsv($path);
-        Mail::to('mazenmashal1011@gmail.com')->send(new MailMessage($qrCodeUrl));
+        Mail::to('badrsaraya2006@gmail.com')->send(new MailMessage($qrCodeUrl));
         Storage::disk('public')->delete('qrcode.png');
         return "QR code generated and sent via email successfully!";
     }

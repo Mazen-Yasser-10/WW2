@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\QrCodeController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\WeaponController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -11,13 +13,15 @@ Route::get('/', function () {
 Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
     ->middleware(['auth','verified'])
     ->name('emails.qr');
-Route::get('qr/bulk', [\App\Http\Controllers\QrCodeController::class, 'convertCsvToQr'])
-    ->name('qr.bulk')
-    ->middleware(['auth', 'verified']);
+Route::get('cart', [CartController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('cart');
+Route::get('market', [WeaponController::class, 'market'])
+    ->middleware(['auth'])
+    ->name('market'); 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
-
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
