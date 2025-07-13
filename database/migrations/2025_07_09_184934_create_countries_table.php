@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('currency')->unique();
-            $table->enum('teamName', ['Allied Powers', 'Axis Powers']);
+            $table->enum('teamName', ['Allied Powers', 'Axis Powers', 'Neutral']);
             $table->timestamps();
         });
     }

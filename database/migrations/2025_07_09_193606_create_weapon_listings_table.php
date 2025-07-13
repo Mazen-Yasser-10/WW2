@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Weapon;
+use App\Models\Country;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +18,9 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Weapon::class)
                 ->constrained('weapons')
+                ->onDelete('cascade');
+            $table->foreignIdFor(Country::class)
+                ->constrained()
                 ->onDelete('cascade');
             $table->enum('marketType' , ['national', 'international'])
                 ->default('national');

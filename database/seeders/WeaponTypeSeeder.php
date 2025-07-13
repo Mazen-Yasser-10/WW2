@@ -15,32 +15,30 @@ class WeaponTypeSeeder extends Seeder
     {
         DB::table('weapon_types')->insert([
             [
-                'name' => 'infantry',
+                'name' => 'Infantry',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'tanks',
+                'name' => 'Tanks',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'artillery forces',
+                'name' => 'Artillery Forces',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'navel forces',
+                'name' => 'Air Forces',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'plans',
+                'name' => 'Naval Forces',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
-            
         ]);
     }
 }

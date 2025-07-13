@@ -21,7 +21,9 @@
 
             <flux:navlist variant="outline">
                 <!-- Add more navigation items here -->
-                
+                <flux:navlist.group :heading="__('Weapons')" class="grid">
+                    <flux:navlist.item icon="shopping-cart" :href="route('weapons.index')" :current="request()->routeIs('weapons.*')" wire:navigate>{{ __('Weapons') }}</flux:navlist.item>
+                </flux:navlist.group>
             </flux:navlist>
 
             <!-- Desktop User Menu -->
