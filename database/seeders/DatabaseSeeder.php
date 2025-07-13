@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Country;
+use App\Models\WeaponListing;
+use Database\Factories\WeaponFactory;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -18,6 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CountrySeeder::class,
             WeaponTypeSeeder::class,
+            WeaponListingSeeder::class,
         ]);
 
         // Get all country IDs to assign to users

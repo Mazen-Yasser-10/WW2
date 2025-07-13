@@ -10,4 +10,9 @@ class WeaponType extends Model
     {
         return $this->hasMany(Weapon::class);
     }
+
+    // public function weaponListings()
+    // {
+    //     return $this->hasManyThrough(WeaponListing::class, Weapon::class);
+    // }
 }

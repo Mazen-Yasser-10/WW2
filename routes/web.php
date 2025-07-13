@@ -16,9 +16,19 @@ Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
 Route::get('cart', [CartController::class, 'index'])
     ->middleware(['auth'])
     ->name('cart');
-Route::get('market', [WeaponController::class, 'market'])
+
+Route::get('/market/national', [WeaponController::class, 'nationalMarket'])
     ->middleware(['auth'])
-    ->name('market'); 
+    ->name('market');
+
+Route::get('/market/international', [WeaponController::class, 'internatinalMarket'])
+    ->middleware(['auth'])
+    ->name('market');    
+
+Route::get('/weapons/{id}', [WeaponController::class, 'show'])
+->name('weapons.show');
+    
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
