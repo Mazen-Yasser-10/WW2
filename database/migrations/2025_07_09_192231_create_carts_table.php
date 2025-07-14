@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->enum('status', ['open', 'submited'])->default('open');
+            $table->enum('status', ['open', 'submitted'])->default('open');
             $table->timestamps();
         });
     }

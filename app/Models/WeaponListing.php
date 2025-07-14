@@ -7,7 +7,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WeaponListing extends Model
 {
-<<<<<<< HEAD
+
+    protected $fillable = [
+        'weapon_id',
+        'country_id',
+        'marketType',
+        'is_available',
+        'price',
+        'quantity',
+    ];
+
+    protected $casts = [
+        'is_available' => 'boolean',
+        'price' => 'decimal:2',
+    ];
+
     use HasFactory;
     
     protected static function booted()
@@ -20,22 +34,21 @@ class WeaponListing extends Model
             }    
         });
     }
-=======
     protected $fillable = ['name', 'price'];
->>>>>>> 9d97086 (make the order pages)
 
     public function weapon()
     {
         return $this->belongsTo(Weapon::class);
     }
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
 
-    // public function weaponType()
-    // {
-    //     return $this->belongsToThrough(weaponType::class, Weapon::class);
-    // }
 
     public function orders()
     {
         return $this->hasMany(Order::class);
     }
+    
 }

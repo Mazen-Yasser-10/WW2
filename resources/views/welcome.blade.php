@@ -57,6 +57,7 @@
             @if (Route::has('login'))
                 <div class="h-14.5 hidden lg:block"></div>
             @endif
+
             <nav class="flex items-center justify-end gap-4 flex-wrap">
                 <a href="{{ route('England') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
                     England

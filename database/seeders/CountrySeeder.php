@@ -15,6 +15,13 @@ class CountrySeeder extends Seeder
     {
         DB::table('countries')->insert([
             [
+                'name' => 'United States',
+                'currency' => 'US Dollar',
+                'teamName' => 'Allied Powers',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'name' => 'United Kingdom',
                 'currency' => 'Pound Sterling',
                 'teamName' => 'Allied Powers',
@@ -36,14 +43,61 @@ class CountrySeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Switzerland',
-                'currency' => 'Swiss Franc',
+                'name' => 'Japan',
+                'currency' => 'Japanese Yen',
                 'teamName' => 'Axis Powers',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
-            
+            [
+                'name' => 'France',
+                'currency' => 'French Franc',
+                'teamName' => 'Allied Powers',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Italy',
+                'currency' => 'Italian Lira',
+                'teamName' => 'Axis Powers',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Canada',
+                'currency' => 'Canadian Dollar',
+                'teamName' => 'Allied Powers',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Australia',
+                'currency' => 'Australian Pound',
+                'teamName' => 'Allied Powers',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'China',
+                'currency' => 'Chinese Yuan',
+                'teamName' => 'Allied Powers',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Switzerland',
+                'currency' => 'Swiss Franc',
+                'teamName' => 'Neutral',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Sweden',
+                'currency' => 'Swedish Krona',
+                'teamName' => 'Neutral',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }
