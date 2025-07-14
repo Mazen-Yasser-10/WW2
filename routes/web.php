@@ -5,10 +5,38 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WeaponController;
+use App\Http\Controllers\OrderController;
 
-Route::get('/', function () {
+Route::get('/', function ()
+{
     return view('welcome');
 })->name('home');
+
+
+Route::get('/England', function () // 1
+{
+    return view('England');
+})->name('England');
+
+Route::get('/Soviet_Union', function () // 2
+{
+    return view('Soviet_Union');
+
+})->name('Soviet_Union');
+
+Route::get('/Germany', function () // 3
+{
+    return view('Germany');
+
+})->name('Germany');
+
+Route::resource('orders', OrderController::class);
+
+
+Route::get('/Switzerland', function ()
+{
+    return view('Switzerland');
+})->name('Switzerland');
 
 Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
     ->middleware(['auth','verified'])
@@ -34,6 +62,7 @@ Route::get('weapons/{weapon}/edit', [WeaponController::class, 'edit'])
 Route::put('weapons/{weapon}', [WeaponController::class, 'update'])
     ->middleware(['auth'])
     ->name('weapons.update');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

@@ -1,4 +1,5 @@
 <x-layouts.app :title="__('Weapon details')">
+
     <div class="bg-black overflow-hidden shadow rounded-lg">
         <div class="px-4 py-5 sm:p-6">
             <div class="flex items-center justify-between mb-6">

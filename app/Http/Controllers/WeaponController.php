@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Weapon;
 use App\Models\WeaponListing;
+
 use App\Models\WeaponType;
 use App\Models\Cart;
 use App\Models\Order;
@@ -41,12 +42,15 @@ class WeaponController extends Controller
     }
 
     public function show($id)
+
     {
         // Display specific weapon with all listings
         $weapon = Weapon::with(['weaponType', 'weaponListings.country'])
             ->findOrFail($id);
         
+
         return view('weapons.show', compact('weapon'));
+
     }
 
     public function create()
@@ -110,6 +114,7 @@ class WeaponController extends Controller
     /**
      * Add weapon to cart - requires transaction
      */
+
     public function addToCart(Request $request, $weaponListingId)
     {
         $request->validate([
@@ -148,6 +153,7 @@ class WeaponController extends Controller
         });
 
         return redirect()->route('cart.index')->with('success', 'Weapon added to cart.');
+
     }
 
     /**
