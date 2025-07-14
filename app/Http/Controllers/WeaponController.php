@@ -6,6 +6,7 @@ use App\Models\Weapon;
 use App\Models\WeaponListing;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WeaponController extends Controller
 {
@@ -14,11 +15,26 @@ class WeaponController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function market()
+    public function internatinalMarket()
     {
         // Logic to retrieve and return a list of weapons
         
-        return view('weapons.market', ['weapons']);
+        return view('weapons.internationalMarket', [
+            'weapons' => WeaponListing::whereHas('weapon', function ($query) {
+                $query->where('country_id', '!=', Auth::user()->country_id);
+            })->with('weapon')->paginate(9),
+        ]);
+    }
+
+    public function nationalMarket()
+    {
+        // Logic to retrieve and return a list of weapons
+        
+        return view('weapons.internationalMarket', [
+            'weapons' => WeaponListing::whereHas('weapon', function ($query) {
+                $query->where('country_id', '=', Auth::user()->country_id);
+            })->with('weapon')->paginate(9),
+        ]);
     }
 
     /**
@@ -51,10 +67,11 @@ class WeaponController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(WeaponListing $id)
     {
         // Logic to display a specific weapon by ID
-        return view('weapons.show', ['weapon']);
+        
+        return view('weapons.show', ['weapon' => $id]);
     }
 
     /**

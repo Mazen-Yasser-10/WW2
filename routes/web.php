@@ -40,9 +40,14 @@ Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
 Route::get('cart', [CartController::class, 'index'])
     ->middleware(['auth'])
     ->name('cart');
-Route::get('market', [WeaponController::class, 'market'])
+
+Route::get('/market/national', [WeaponController::class, 'nationalMarket'])
     ->middleware(['auth'])
     ->name('market');
+
+Route::get('/market/international', [WeaponController::class, 'internatinalMarket'])
+    ->middleware(['auth'])
+  
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');

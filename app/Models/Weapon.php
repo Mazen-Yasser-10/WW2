@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory; 
 
 class Weapon extends Model
 {
+    use HasFactory;
+
     public function weaponType()
     {
         return $this->belongsTo(WeaponType::class);
@@ -14,5 +17,10 @@ class Weapon extends Model
     public function weaponListings()
     {
         return $this->hasMany(WeaponListing::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 }
