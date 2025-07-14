@@ -5,6 +5,7 @@ use Livewire\Volt\Volt;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WeaponController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function ()
 {
@@ -29,7 +30,10 @@ Route::get('/Germany', function () // 3
 
 })->name('Germany');
 
-Route::get('/Switzerland', function () // 4
+Route::resource('orders', OrderController::class);
+
+
+Route::get('/Switzerland', function ()
 {
     return view('Switzerland');
 })->name('Switzerland');

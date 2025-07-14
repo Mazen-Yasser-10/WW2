@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WeaponListing extends Model
 {
+<<<<<<< HEAD
     use HasFactory;
     
     protected static function booted()
@@ -19,6 +20,9 @@ class WeaponListing extends Model
             }    
         });
     }
+=======
+    protected $fillable = ['name', 'price'];
+>>>>>>> 9d97086 (make the order pages)
 
     public function weapon()
     {
