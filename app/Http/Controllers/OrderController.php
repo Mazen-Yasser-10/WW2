@@ -9,36 +9,19 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the orders.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $orders = Order::all();
-        // Logic to retrieve and return a list of orders
-        return view('orders.index',compact('orders'));
+        $orders = Order::with(['cart.user', 'weaponListing.weapon.weaponType', 'weaponListing.weapon.country'])
+            ->latest()
+            ->get();
+        return view('orders.index', compact('orders'));
     }
-
-    /**
-     * Show the form for creating a new order.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $carts = Cart::all();
         $weapons = WeaponListing::all();
         return view('orders.create',compact('carts','weapons'));
     }
-
-    /**
-     * Store a newly created order in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         $request->validate([

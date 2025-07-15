@@ -14,7 +14,6 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="home" :href="route('market')" :current="request()->routeIs('market')" wire:navigate>{{ __('Market') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -23,7 +22,9 @@
             <flux:navlist variant="outline">
                 <!-- Add more navigation items here -->
                 <flux:navlist.group :heading="__('Weapons')" class="grid">
-                    <flux:navlist.item icon="shopping-cart" :href="route('weapons.index')" :current="request()->routeIs('weapons.*')" wire:navigate>{{ __('Weapons') }}</flux:navlist.item>
+                    <flux:navlist.item icon="building-storefront" :href="route('weapons.index')" :current="request()->routeIs('weapons.*')" wire:navigate>{{ __('Weapons Shop') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('cart.index')" :current="request()->routeIs('cart.*')" wire:navigate>{{ __('Cart') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-text" :href="route('orders.index')" :current="request()->routeIs('orders.*')" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

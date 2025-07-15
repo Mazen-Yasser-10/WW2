@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Weapon extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'weapon_type_id',
+    ];
 
     public function weaponType()
     {

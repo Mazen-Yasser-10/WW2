@@ -15,6 +15,7 @@ class WeaponListing extends Model
         'is_available',
         'price',
         'quantity',
+        'name',
     ];
 
     protected $casts = [
@@ -34,7 +35,6 @@ class WeaponListing extends Model
             }    
         });
     }
-    protected $fillable = ['name', 'price'];
 
     public function weapon()
     {

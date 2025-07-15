@@ -6,6 +6,7 @@ use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WeaponController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserCashController;
 
 Route::get('/', function ()
 {
@@ -43,7 +44,7 @@ Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
     ->name('emails.qr');
 Route::get('cart', [CartController::class, 'index'])
     ->middleware(['auth'])
-    ->name('cart');
+    ->name('cart.index');
 Route::get('/weapons/index', [WeaponController::class, 'index'])
     ->middleware(['auth'])
     ->name('weapons.index'); 
@@ -62,6 +63,29 @@ Route::get('weapons/{weapon}/edit', [WeaponController::class, 'edit'])
 Route::put('weapons/{weapon}', [WeaponController::class, 'update'])
     ->middleware(['auth'])
     ->name('weapons.update');
+Route::post('carts/add/{weapon}', [CartController::class, 'addToCart'])
+    ->middleware(['auth'])
+    ->name('cart.add');
+Route::delete('cart/remove/{order}', [CartController::class, 'remove'])
+    ->middleware(['auth'])
+    ->name('cart.remove');
+Route::delete('cart/clear', [CartController::class, 'clear'])
+    ->middleware(['auth'])
+    ->name('cart.clear');
+Route::post('cart/checkout', [CartController::class, 'checkout'])
+    ->middleware(['auth'])
+    ->name('cart.checkout');
+
+// User Cash Management Routes
+Route::post('user/add-funds', [UserCashController::class, 'addFunds'])
+    ->middleware(['auth'])
+    ->name('user.add-funds');
+Route::post('user/deduct-funds', [UserCashController::class, 'deductFunds'])
+    ->middleware(['auth'])
+    ->name('user.deduct-funds');
+Route::get('user/balance', [UserCashController::class, 'getBalance'])
+    ->middleware(['auth'])
+    ->name('user.balance');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
