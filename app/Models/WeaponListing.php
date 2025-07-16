@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class WeaponListing extends Model
 {
     use HasFactory;
-    
+
     protected static function booted()
     {
         static::saving(function ($item) {
@@ -16,7 +16,7 @@ class WeaponListing extends Model
                 $item->is_available = false;
             }else {
                 $item->is_available = true;
-            }    
+            }
         });
     }
 
