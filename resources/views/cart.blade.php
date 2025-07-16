@@ -2,6 +2,16 @@
     <div class="min-h-screen bg-gray-900 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
+            @if(session('error'))
+                <div class="bg-red-900/50 border border-red-800 text-red-300 px-6 py-4 rounded-xl mb-6">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        {{ session('error') }}
+                    </div>
+                </div>
+            @endif
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-white mb-2">🛒 Your Arsenal Cart</h1>
                 <p class="text-gray-400">Review your selected weapons before deployment</p>

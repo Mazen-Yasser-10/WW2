@@ -1,5 +1,5 @@
     <!DOCTYPE html>
-    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,10 +26,10 @@
                     <nav class="flex items-center justify-end gap-4">
                         @auth
                             <a
-                                href="{{ url('/dashboard') }}"
+                                href="{{ route('weapons.index') }}"
                                 class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
                             >
-                                Dashboard
+                                Marketplace
                             </a>
                         @else
                             <a
@@ -58,20 +58,106 @@
                 <div class="h-14.5 hidden lg:block"></div>
             @endif
 
-            <nav class="flex items-center justify-end gap-4 flex-wrap">
-                <a href="{{ route('England') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
-                    England
-                </a>
-                <a href="{{ route('Soviet_Union') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                    Soviet Union
-                </a>
-                <a href="{{ route('Germany') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-                    Germany
-                </a>
-                <a href="{{ route('Switzerland') }}" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition">
-                    Switzerland
-                </a>
-            </nav>
+            <nav class="w-full max-w-4xl mx-auto">
+                <div class="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 rounded-3xl p-8 shadow-2xl border border-gray-600/50 backdrop-blur-sm">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-white mb-3">🌍 World War II Nations</h2>
+                        <p class="text-gray-300 text-lg">Choose your faction and explore historical arsenals</p>
+                        <div class="w-24 h-1 bg-gradient-to-r from-blue-500 to-red-500 mx-auto mt-4 rounded-full"></div>
+                    </div>
 
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- England -->
+                        <a href="{{ route('England') }}" class="group relative overflow-hidden bg-gradient-to-br from-blue-800 to-blue-900 rounded-2xl p-6 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-blue-600/30">
+                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                                    <span class="text-3xl">🇬🇧</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">England</h3>
+                                <p class="text-blue-200 text-sm mb-4">Royal Armed Forces</p>
+                                <div class="flex items-center justify-center text-white/80 group-hover:text-white transition-colors">
+                                    <span class="text-sm font-medium">Explore Arsenal</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Soviet Union -->
+                        <a href="{{ route('Soviet_Union') }}" class="group relative overflow-hidden bg-gradient-to-br from-red-800 to-red-900 rounded-2xl p-6 hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-red-600/30">
+                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                                    <span class="text-3xl">🇷🇺</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Soviet Union</h3>
+                                <p class="text-red-200 text-sm mb-4">Red Army Forces</p>
+                                <div class="flex items-center justify-center text-white/80 group-hover:text-white transition-colors">
+                                    <span class="text-sm font-medium">Explore Arsenal</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Germany -->
+                        <a href="{{ route('Germany') }}" class="group relative overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-gray-600/30">
+                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                                    <span class="text-3xl">🇩🇪</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Germany</h3>
+                                <p class="text-gray-200 text-sm mb-4">Wehrmacht Forces</p>
+                                <div class="flex items-center justify-center text-white/80 group-hover:text-white transition-colors">
+                                    <span class="text-sm font-medium">Explore Arsenal</span>
+                                </div>
+                            </div>
+                        </a>
+
+                        <!-- Switzerland -->
+                        <a href="{{ route('Switzerland') }}" class="group relative overflow-hidden bg-gradient-to-br from-yellow-600 to-orange-700 rounded-2xl p-6 hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 hover:shadow-2xl border border-yellow-500/30">
+                            <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30">
+                                    <span class="text-3xl">🇨🇭</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-2">Switzerland</h3>
+                                <p class="text-yellow-100 text-sm mb-4">Swiss Armed Forces</p>
+                                <div class="flex items-center justify-center text-white/80 group-hover:text-white transition-colors">
+                                    <span class="text-sm font-medium">Explore Arsenal</span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Historical Note -->
+                    <div class="mt-8 pt-6 border-t border-gray-600/50">
+                        <div class="text-center">
+                            <p class="text-gray-400 text-sm max-w-2xl mx-auto">
+                                🏛️ <strong>Historical Note:</strong> Each nation represents authentic WWII-era military equipment and specifications. 
+                                Explore historically accurate arsenals from one of history's most significant conflicts.
+                            </p>
+                        </div>
+
+                        <!-- Quick Stats -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-400">1939-1945</div>
+                                <div class="text-xs text-gray-400">War Period</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-400">4</div>
+                                <div class="text-xs text-gray-400">Nations</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-400">100+</div>
+                                <div class="text-xs text-gray-400">Weapons</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-orange-400">⚡</div>
+                                <div class="text-xs text-gray-400">Authentic</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </body>
     </html>

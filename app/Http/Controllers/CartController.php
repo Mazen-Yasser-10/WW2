@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 
-
 class CartController extends Controller
 {
     public function index()
@@ -38,7 +37,6 @@ class CartController extends Controller
         ]);
 
         $weaponListing = WeaponListing::findOrFail($weaponListingId);
-
         DB::transaction(function () use ($request, $weaponListing) {
             $cart = Cart::create([
                 'user_id' => Auth::id(),
@@ -67,21 +65,17 @@ class CartController extends Controller
     {
         $order = Order::findOrFail($id);
         
-        // Verify this order belongs to the current user's cart
         $cart = Cart::where('user_id', Auth::id())->where('id', $order->cart_id)->first();
         
         if (!$cart) {
             return redirect()->route('cart.index')->with('error', 'Unauthorized action.');
         }
 
-        // Restore weapon quantity
         $order->weaponListing->increment('quantity', $order->quantity);
         $order->weaponListing->update(['is_available' => true]);
         
-        // Delete the order
         $order->delete();
         
-        // If cart has no more orders, delete the cart
         if ($cart->orders()->count() === 0) {
             $cart->delete();
         }
@@ -95,19 +89,39 @@ class CartController extends Controller
         
         foreach ($carts as $cart) {
             foreach ($cart->orders as $order) {
-                // Restore weapon quantities
                 $order->weaponListing->increment('quantity', $order->quantity);
                 $order->weaponListing->update(['is_available' => true]);
             }
-            // Delete cart and its orders
             $cart->delete();
         }
         
         return redirect()->route('cart.index')->with('success', 'Cart cleared successfully.');  
     }
-    public function checkout()
+    public function checkout(Request $request)
     {
-        return redirect()->route('orders.create')->with('success', 'Proceeding to checkout.');
+        $cart = Cart::where('user_id', Auth::id())
+            ->where('status', 'open')
+            ->with('orders.weaponListing')
+            ->firstOrFail();
+        if(Auth::user()->cash < $cart->orders->sum('total_price')) {
+            return redirect()->route('cart.index')->with('error', 'Insufficient funds to complete the order.');
+        }
+
+        DB::transaction(function () use ($cart) {
+            foreach ($cart->orders as $order) {
+                if (!$order->weaponListing->is_available || 
+                    $order->weaponListing->quantity < $order->quantity) {
+                    throw new \Exception("Item {$order->weaponListing->weapon->name} is no longer available");
+                }
+            }
+
+            $cart->update(['status' => 'submitted']);
+            
+        });
+
+        $this->clear();
+        
+        return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
     }
     
 }

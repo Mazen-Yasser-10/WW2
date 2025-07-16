@@ -4,11 +4,6 @@
             <flux:heading size="xl" level="1">{{ __('Settings') }}</flux:heading>
             <flux:subheading size="lg" class="mb-6">{{ __('Manage your profile and account settings') }}</flux:subheading>
         </div>
-        
-        <!-- Cash Balance Component -->
-        <div class="ml-6">
-            <x-cash-balance />
-        </div>
     </div>
     <flux:separator variant="subtle" />
 </div>

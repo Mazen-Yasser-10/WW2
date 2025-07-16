@@ -8,6 +8,16 @@
             </div>
         </div>
     </div>
+    @if(session('error'))
+        <div class="bg-red-900/50 border border-red-800 text-red-300 px-6 py-4 rounded-xl mb-6">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                {{ session('error') }}
+            </div>
+        </div>
+    @endif
 
     <div class="max-w-7xl mx-auto px-4">
         <div class="bg-gray-800 border border-gray-700 overflow-hidden shadow-xl rounded-lg">
@@ -47,15 +57,16 @@
                         <div class="aspect-square bg-gray-600 rounded-lg flex items-center justify-center mb-4">
                             @if($weapon->weapon->image)
                                 <img src="{{ $weapon->weapon->image }}" alt="{{ $weapon->weapon->name }}" 
-                                     class="w-full h-full object-cover rounded-lg"
+                                     class="w-40 h-40 object-cover rounded-lg"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            @endif
+                            @else
                             <div class="flex flex-col items-center justify-center text-gray-400">
                                 <svg class="w-16 h-16 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                                 </svg>
                                 <span class="text-sm">{{ $weapon->weapon->name }}</span>
                             </div>
+                            @endif
                         </div>
                         
                         <!-- Quick Stats -->

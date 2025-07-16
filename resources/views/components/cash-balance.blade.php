@@ -27,8 +27,8 @@
 </div>
 
 <!-- Add Funds Modal (hidden by default) -->
-<div id="addFundsModal" class="fixed inset-0 bg-black bg-opacity-90 backdrop-blur-md hidden z-[99999] flex items-center justify-center p-4" style="position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;">
-    <div class="bg-gray-800 rounded-2xl border border-gray-700 p-6 w-full max-w-sm mx-auto shadow-2xl transform transition-all duration-300 scale-95 opacity-0 relative" id="modalContent" style="position: relative !important; z-index: 100000 !important;">
+<div id="addFundsModal" class="fixed inset-0 bg-black bg-opacity-90 backdrop-blur-md hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-gray-800 rounded-2xl border border-gray-700 p-6 w-full max-w-sm mx-auto shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
         <div class="text-center mb-6">
             <h3 class="text-xl font-bold text-white mb-2">💰 Add War Funds</h3>
             <p class="text-gray-400 text-sm">Increase your operational budget</p>
@@ -51,10 +51,10 @@
                 
                 <!-- Quick Amount Buttons -->
                 <div class="grid grid-cols-4 gap-2">
-                    <button type="button" onclick="setAmount(100)" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$100</button>
-                    <button type="button" onclick="setAmount(500)" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$500</button>
-                    <button type="button" onclick="setAmount(1000)" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$1K</button>
-                    <button type="button" onclick="setAmount(5000)" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$5K</button>
+                    <button type="button" onclick="setAmount(100)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$100</button>
+                    <button type="button" onclick="setAmount(500)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$500</button>
+                    <button type="button" onclick="setAmount(1000)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$1K</button>
+                    <button type="button" onclick="setAmount(5000)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$5K</button>
                 </div>
             </div>
             
@@ -78,24 +78,10 @@ function showAddFundsModal() {
     const modal = document.getElementById('addFundsModal');
     const modalContent = document.getElementById('modalContent');
     
-    // Prevent any interference with page content
-    modal.style.position = 'fixed';
-    modal.style.top = '0';
-    modal.style.left = '0';
-    modal.style.width = '100%';
-    modal.style.height = '100%';
-    modal.style.zIndex = '99999';
-    
     modal.classList.remove('hidden');
     
-    // Prevent body scroll and interaction
+    // Prevent body scroll
     document.body.style.overflow = 'hidden';
-    document.body.style.position = 'relative';
-    
-    // Stop event propagation
-    modal.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
     
     // Animate modal in
     setTimeout(() => {
@@ -112,9 +98,8 @@ function hideAddFundsModal() {
     modalContent.classList.remove('scale-100', 'opacity-100');
     modalContent.classList.add('scale-95', 'opacity-0');
     
-    // Restore body scroll and position
+    // Restore body scroll
     document.body.style.overflow = '';
-    document.body.style.position = '';
     
     setTimeout(() => {
         modal.classList.add('hidden');

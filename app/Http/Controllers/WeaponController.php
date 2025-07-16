@@ -104,27 +104,6 @@ class WeaponController extends Controller
 
         return redirect()->route('weapons.index')->with('success', 'Weapon created successfully.');
     }
-    public function checkout(Request $request)
-    {
-        $cart = Cart::where('user_id', Auth::id())
-            ->where('status', 'open')
-            ->with('orders.weaponListing')
-            ->firstOrFail();
-
-        DB::transaction(function () use ($cart) {
-            foreach ($cart->orders as $order) {
-                if (!$order->weaponListing->is_available || 
-                    $order->weaponListing->quantity < $order->quantity) {
-                    throw new \Exception("Item {$order->weaponListing->weapon->name} is no longer available");
-                }
-            }
-
-            $cart->update(['status' => 'submitted']);
-            
-        });
-
-        return redirect()->route('orders.index')->with('success', 'Order placed successfully.');
-    }
 
     public function edit($id)
     {

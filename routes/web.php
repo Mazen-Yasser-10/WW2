@@ -31,8 +31,6 @@ Route::get('/Germany', function () // 3
 
 })->name('Germany');
 
-Route::resource('orders', OrderController::class);
-
 
 Route::get('/Switzerland', function ()
 {
@@ -48,6 +46,12 @@ Route::get('cart', [CartController::class, 'index'])
 Route::get('/weapons/index', [WeaponController::class, 'index'])
     ->middleware(['auth'])
     ->name('weapons.index'); 
+Route::get('orders', [OrderController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('orders.index');
+Route::get('orders/user_orders', [OrderController::class, 'showByUser'])
+    ->middleware(['auth'])
+    ->name('orders.user_orders');
 Route::get('weapons/show/{weapon}', [WeaponController::class, 'show'])
     ->middleware(['auth'])
     ->name('weapons.show');
@@ -80,12 +84,6 @@ Route::post('cart/checkout', [CartController::class, 'checkout'])
 Route::post('user/add-funds', [UserCashController::class, 'addFunds'])
     ->middleware(['auth'])
     ->name('user.add-funds');
-Route::post('user/deduct-funds', [UserCashController::class, 'deductFunds'])
-    ->middleware(['auth'])
-    ->name('user.deduct-funds');
-Route::get('user/balance', [UserCashController::class, 'getBalance'])
-    ->middleware(['auth'])
-    ->name('user.balance');
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])

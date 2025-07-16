@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\WeaponListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -18,7 +19,10 @@ class OrderController extends Controller
     }
     public function create()
     {
-        $carts = Cart::all();
+        $carts = Cart::where('user_id', Auth::user()->id)
+            ->where('status', 'open')
+            ->with('orders.weaponListing.weapon.weaponType', 'orders.weaponListing.weapon.country')
+            ->get();
         $weapons = WeaponListing::all();
         return view('orders.create',compact('carts','weapons'));
     }
@@ -40,5 +44,15 @@ class OrderController extends Controller
         ]);
 
         return redirect()->route('orders.index')->with('success', 'Order created successfully.');
+    }
+    public function showByUser()
+    {
+        $orders = Order::whereHas('cart', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->with(['weaponListing.weapon.weaponType', 'weaponListing.weapon.country'])
+            ->latest()
+            ->get();
+
+        return view('orders.user_orders', compact('orders'));
     }
 }
