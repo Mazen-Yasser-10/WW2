@@ -6,39 +6,26 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\WeaponListing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
-    /**
-     * Display a listing of the orders.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $orders = Order::all();
-        // Logic to retrieve and return a list of orders
-        return view('orders.index',compact('orders'));
+        $orders = Order::with(['cart.user', 'weaponListing.weapon.weaponType', 'weaponListing.weapon.country'])
+            ->latest()
+            ->get();
+        return view('orders.index', compact('orders'));
     }
-
-    /**
-     * Show the form for creating a new order.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $carts = Cart::all();
+        $carts = Cart::where('user_id', Auth::user()->id)
+            ->where('status', 'open')
+            ->with('orders.weaponListing.weapon.weaponType', 'orders.weaponListing.weapon.country')
+            ->get();
         $weapons = WeaponListing::all();
         return view('orders.create',compact('carts','weapons'));
     }
-
-    /**
-     * Store a newly created order in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -57,5 +44,15 @@ class OrderController extends Controller
         ]);
 
         return redirect()->route('orders.index')->with('success', 'Order created successfully.');
+    }
+    public function showByUser()
+    {
+        $orders = Order::whereHas('cart', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->with(['weaponListing.weapon.weaponType', 'weaponListing.weapon.country'])
+            ->latest()
+            ->get();
+
+        return view('orders.user_orders', compact('orders'));
     }
 }

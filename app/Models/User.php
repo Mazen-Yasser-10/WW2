@@ -25,6 +25,7 @@ class User extends Authenticatable
         'password',
         'country_id',
         'role',
+        'cash',
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'cash' => 'decimal:2',
         ];
     }
 
@@ -70,5 +72,48 @@ class User extends Authenticatable
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * Get formatted cash balance
+     */
+    public function getFormattedCashAttribute(): string
+    {
+        return '$' . number_format($this->cash ?? 0, 2);
+    }
+
+    /**
+     * Add cash to user balance
+     */
+    public function addCash(float $amount): bool
+    {
+        return $this->increment('cash', $amount);
+    }
+
+    /**
+     * Deduct cash from user balance
+     */
+    public function deductCash(float $amount): bool
+    {
+        if ($this->cash >= $amount) {
+            return $this->decrement('cash', $amount);
+        }
+        return false;
+    }
+
+    /**
+     * Check if user has sufficient cash
+     */
+    public function hasSufficientCash(float $amount): bool
+    {
+        return ($this->cash ?? 0) >= $amount;
+    }
+
+    /**
+     * Get the user's cash attribute with default value
+     */
+    public function getCashAttribute($value): float
+    {
+        return (float) ($value ?? 0);
     }
 }

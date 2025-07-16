@@ -27,90 +27,134 @@ class WeaponsSeeder extends Seeder
         }
 
         $weapons = [
-            // Infantry Weapons
+            // Infantry Weapons - Using CS:GO weapon images
             [
-                'name' => 'M1 Garand',
+                'name' => 'AK-47 Kalashnikov',
                 'weapon_type_id' => $infantryType->id,
+                'description' => 'Soviet assault rifle, reliable and powerful',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/AK-47.webp',
             ],
             [
-                'name' => 'Thompson M1928',
+                'name' => 'M4A4 Carbine', 
                 'weapon_type_id' => $infantryType->id,
+                'description' => 'American assault rifle, accurate and versatile',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/M4A4.webp',
             ],
             [
-                'name' => 'StG 44',
+                'name' => 'AWP Sniper Rifle',
                 'weapon_type_id' => $infantryType->id,
+                'description' => 'High-precision sniper rifle, one shot one kill',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/AWP.webp',
             ],
             [
-                'name' => 'Lee-Enfield',
+                'name' => 'Galil Assault Rifle',
                 'weapon_type_id' => $infantryType->id,
+                'description' => 'Israeli assault rifle, robust and reliable',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Galil%20AR.webp',
             ],
             [
-                'name' => 'Mosin-Nagant',
+                'name' => 'FAMAS Bullpup',
                 'weapon_type_id' => $infantryType->id,
+                'description' => 'French bullpup assault rifle, unique design',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/FAMAS.webp',
+            ],
+            [
+                'name' => 'MP5 Submachine Gun',
+                'weapon_type_id' => $infantryType->id,
+                'description' => 'German submachine gun, compact and effective',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/MP5-SD.webp',
             ],
 
-            // Tanks
+            // Tanks - Using CS:GO weapon images for heavy weapons
             [
-                'name' => 'M4 Sherman',
+                'name' => 'M249 Heavy Machine Gun',
                 'weapon_type_id' => $tanksType->id,
+                'description' => 'American light machine gun, sustained fire support',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/M249.webp',
             ],
             [
-                'name' => 'Tiger I',
+                'name' => 'Negev Machine Gun',
                 'weapon_type_id' => $tanksType->id,
+                'description' => 'Israeli machine gun, devastating firepower',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Negev.webp',
             ],
             [
-                'name' => 'T-34',
+                'name' => 'Nova Shotgun',
                 'weapon_type_id' => $tanksType->id,
+                'description' => 'Pump-action shotgun, close quarters combat',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Nova.webp',
             ],
             [
-                'name' => 'Churchill VII',
+                'name' => 'XM1014 Auto Shotgun',
                 'weapon_type_id' => $tanksType->id,
+                'description' => 'Semi-automatic shotgun, rapid firepower',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/XM1014.webp',
             ],
 
-            // Artillery
+            // Artillery - Using CS:GO heavy weapons
             [
-                'name' => '88mm FlaK 36',
+                'name' => 'MAG-7 Tactical Shotgun',
                 'weapon_type_id' => $artilleryType->id,
+                'description' => 'Magazine-fed shotgun, tactical operations',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/MAG-7.webp',
             ],
             [
-                'name' => 'Katyusha',
+                'name' => 'Sawed-Off Shotgun',
                 'weapon_type_id' => $artilleryType->id,
+                'description' => 'Short-barrel shotgun, devastating at close range',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Sawed-Off.webp',
             ],
             [
-                'name' => 'M1 155mm Howitzer',
+                'name' => 'G3SG1 Sniper Rifle',
                 'weapon_type_id' => $artilleryType->id,
+                'description' => 'German sniper rifle, precision long-range weapon',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/G3SG1.webp',
             ],
 
-            // Air Forces
+            // Air Forces - Using CS:GO SMGs and rifles
             [
-                'name' => 'P-51 Mustang',
+                'name' => 'P90 Personal Defense Weapon',
                 'weapon_type_id' => $airType->id,
+                'description' => 'Belgian PDW, high rate of fire, air crew protection',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/P90.webp',
             ],
             [
-                'name' => 'Messerschmitt Bf 109',
+                'name' => 'MP7 Personal Defense Weapon',
                 'weapon_type_id' => $airType->id,
+                'description' => 'German PDW, compact and lightweight for aircrew',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/MP7.webp',
             ],
             [
-                'name' => 'Supermarine Spitfire',
+                'name' => 'UMP-45 Submachine Gun',
                 'weapon_type_id' => $airType->id,
+                'description' => 'German SMG, reliable sidearm for pilots',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/UMP-45.webp',
             ],
             [
-                'name' => 'Yakovlev Yak-3',
+                'name' => 'MAC-10 Machine Pistol',
                 'weapon_type_id' => $airType->id,
+                'description' => 'American machine pistol, compact emergency weapon',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/MAC-10.webp',
             ],
 
-            // Naval Forces
+            // Naval Forces - Using CS:GO pistols and SMGs
             [
-                'name' => 'USS Iowa Battleship',
+                'name' => 'Desert Eagle Pistol',
                 'weapon_type_id' => $navalType->id,
+                'description' => 'Powerful handgun, naval officer sidearm',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Desert%20Eagle.webp',
             ],
             [
-                'name' => 'U-boat Type VII',
+                'name' => 'Five-SeveN Pistol',
                 'weapon_type_id' => $navalType->id,
+                'description' => 'Belgian pistol, reliable naval service weapon',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Five-SeveN.webp',
             ],
             [
-                'name' => 'HMS Hood',
+                'name' => 'Glock-18 Pistol',
                 'weapon_type_id' => $navalType->id,
+                'description' => 'Austrian pistol, standard naval sidearm',
+                'image' => 'https://www.csgodatabase.com/images/weapons/webp/Glock-18.webp',
             ],
         ];
 

@@ -19,7 +19,6 @@ class WeaponController extends Controller
     {
         $query = WeaponListing::with(['weapon', 'country']);
 
-        // Apply filters
         if ($request->filled('weapon_type')) {
             $query->whereHas('weapon', function ($q) use ($request) {
                 $q->where('weapon_type_id', $request->weapon_type);
@@ -44,8 +43,7 @@ class WeaponController extends Controller
     public function show($id)
 
     {
-        // Display specific weapon with all listings
-        $weapon = Weapon::with(['weaponType', 'weaponListings.country'])
+        $weapon = WeaponListing::with(['weapon', 'country'])
             ->findOrFail($id);
         
 
@@ -58,7 +56,6 @@ class WeaponController extends Controller
         $weaponTypes = WeaponType::all();
         $countries = Country::all();
         
-        // Create default weapon types if none exist
         if ($weaponTypes->isEmpty()) {
             $defaultTypes = [
                 ['name' => 'Infantry'],
@@ -89,15 +86,12 @@ class WeaponController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Use transaction for creating weapon and listing
         DB::transaction(function () use ($request) {
-            // Create weapon (base specifications)
             $weapon = Weapon::create([
                 'name' => $request->name,
                 'weapon_type_id' => $request->weapon_type_id,
             ]);
 
-            // Create weapon listing (country-specific variant)
             WeaponListing::create([
                 'weapon_id' => $weapon->id,
                 'country_id' => $request->country_id,
@@ -111,87 +105,11 @@ class WeaponController extends Controller
         return redirect()->route('weapons.index')->with('success', 'Weapon created successfully.');
     }
 
-    /**
-     * Add weapon to cart - requires transaction
-     */
-
-    public function addToCart(Request $request, $weaponListingId)
-    {
-        $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        $weaponListing = WeaponListing::findOrFail($weaponListingId);
-        
-        if ($weaponListing->quantity < $request->quantity) {
-            return back()->withErrors(['quantity' => 'Not enough quantity available.']);
-        }
-
-        // Use transaction for cart operations
-        DB::transaction(function () use ($request, $weaponListing) {
-            // Get or create user's cart
-            $cart = Cart::firstOrCreate([
-                'user_id' => Auth::id(),
-                'status' => 'open'
-            ]);
-
-            // Create order
-            Order::create([
-                'cart_id' => $cart->id,
-                'weapon_listing_id' => $weaponListing->id,
-                'quantity' => $request->quantity,
-                'total_price' => $weaponListing->price * $request->quantity,
-            ]);
-
-            // Update weapon listing quantity
-            $weaponListing->decrement('quantity', $request->quantity);
-            
-            // Mark as unavailable if quantity reaches 0
-            if ($weaponListing->quantity <= 0) {
-                $weaponListing->update(['is_available' => false]);
-            }
-        });
-
-        return redirect()->route('cart.index')->with('success', 'Weapon added to cart.');
-
-    }
-
-    /**
-     * Process cart checkout - requires transaction
-     */
-    public function checkout(Request $request)
-    {
-        $cart = Cart::where('user_id', Auth::id())
-            ->where('status', 'open')
-            ->with('orders.weaponListing')
-            ->firstOrFail();
-
-        // Use transaction for checkout process
-        DB::transaction(function () use ($cart) {
-            // Verify all items are still available
-            foreach ($cart->orders as $order) {
-                if (!$order->weaponListing->is_available || 
-                    $order->weaponListing->quantity < $order->quantity) {
-                    throw new \Exception("Item {$order->weaponListing->weapon->name} is no longer available");
-                }
-            }
-
-            // Mark cart as submitted
-            $cart->update(['status' => 'submitted']);
-            
-            // Here you would integrate with payment processing
-            // Update inventory, send notifications, etc.
-        });
-
-        return redirect()->route('orders.index')->with('success', 'Order placed successfully.');
-    }
-
     public function edit($id)
     {
         $weapon = WeaponListing::with(['weapon'])->findOrFail($id);
         $weaponTypes = WeaponType::all();
         $countries = Country::all();
-        // Ensure the weapon has a valid type and country
         return view('weapons.edit', compact('weapon', 'weaponTypes', 'countries'));
     }
 
@@ -205,7 +123,6 @@ class WeaponController extends Controller
 
         $weaponListing = WeaponListing::findOrFail($id);
         
-        // Use transaction for updates that affect availability
         DB::transaction(function () use ($request, $weaponListing) {
             $weaponListing->update([
                 'price' => $request->price,
@@ -221,9 +138,7 @@ class WeaponController extends Controller
     {
         $weaponListing = WeaponListing::findOrFail($id);
         
-        // Use transaction for deletion
         DB::transaction(function () use ($weaponListing) {
-            // Check if weapon has active orders
             $hasActiveOrders = Order::whereHas('cart', function ($query) {
                 $query->where('status', 'open');
             })->where('weapon_listing_id', $weaponListing->id)->exists();

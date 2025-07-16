@@ -14,7 +14,7 @@
         </div>
 
         <!-- Main Form Card -->
-        <div class="bg-black rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
             <div class="bg-gradient-to-r from-red-600 to-red-700 px-8 py-6">
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
@@ -34,62 +34,71 @@
                     <!-- Basic Information Section -->
                     <div class="space-y-6">
                         <div class="border-l-4 border-red-500 pl-4">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-1">Basic Information</h3>
-                            <p class="text-gray-600">Define the core properties of your weapon</p>
+                            <h3 class="text-xl font-semibold text-white mb-1">Basic Information</h3>
+                            <p class="text-gray-400">Define the core properties of your weapon</p>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Weapon Name</flux:label>
-                                <flux:input 
+                                <label class="block text-sm font-semibold text-gray-300">Weapon Name</label>
+                                <input 
+                                    type="text"
                                     name="name" 
                                     placeholder="e.g., M1 Garand, Tiger Tank" 
                                     required 
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
                                 />
-                                <flux:error name="name" class="text-red-500 text-sm" />
+                                @error('name')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Weapon Type</flux:label>
-                                <flux:select 
+                                <label class="block text-sm font-semibold text-gray-300">Weapon Type</label>
+                                <select 
                                     name="weapon_type_id" 
-                                    placeholder="Select weapon category"
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
-                                >
+                                    required
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200">
+                                    <option value="" class="text-gray-400">Select weapon category</option>
                                     @foreach($weaponTypes as $type)
-                                        <option value="{{ $type->id }}">{{ $type->name }}</option>
+                                        <option value="{{ $type->id }}" class="text-white">{{ $type->name }}</option>
                                     @endforeach
-                                </flux:select>
-                                <flux:error name="weapon_type_id" class="text-red-500 text-sm" />
+                                </select>
+                                @error('weapon_type_id')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Damage Rating</flux:label>
-                                <flux:input 
+                                <label class="block text-sm font-semibold text-gray-300">Damage Rating</label>
+                                <input 
                                     type="number" 
                                     name="damage" 
                                     placeholder="Combat effectiveness (0-3000)" 
                                     min="0" 
                                     max="3000"
                                     required 
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
                                 />
-                                <flux:error name="damage" class="text-red-500 text-sm" />
+                                @error('damage')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Manufacturing Country</flux:label>
-                                <flux:select 
+                                <label class="block text-sm font-semibold text-gray-300">Manufacturing Country</label>
+                                <select 
                                     name="country_id" 
-                                    placeholder="Select manufacturing nation"
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
-                                >
+                                    required
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200">
+                                    <option value="" class="text-gray-400">Select manufacturing nation</option>
                                     @foreach($countries as $country)
-                                        <option value="{{ $country->id }}">🏳️ {{ $country->name }}</option>
+                                        <option value="{{ $country->id }}" class="text-white">🏳️ {{ $country->name }}</option>
                                     @endforeach
-                                </flux:select>
-                                <flux:error name="country_id" class="text-red-500 text-sm" />
+                                </select>
+                                @error('country_id')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -97,69 +106,74 @@
                     <!-- Market Configuration Section -->
                     <div class="space-y-6">
                         <div class="border-l-4 border-blue-500 pl-4">
-                            <h3 class="text-xl font-semibold text-gray-900 mb-1">Market Configuration</h3>
-                            <p class="text-gray-600">Set pricing and availability for the global market</p>
+                            <h3 class="text-xl font-semibold text-white mb-1">Market Configuration</h3>
+                            <p class="text-gray-400">Set pricing and availability for the global market</p>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Market Availability</flux:label>
-                                <flux:select 
+                                <label class="block text-sm font-semibold text-gray-300">Market Availability</label>
+                                <select 
                                     name="market_type" 
-                                    placeholder="Choose market scope"
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
-                                >
-                                    <option value="international">🌍 International Market</option>
-                                    <option value="national">🏠 National Only</option>
-                                </flux:select>
-                                <flux:error name="market_type" class="text-red-500 text-sm" />
+                                    required
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200">
+                                    <option value="" class="text-gray-400">Choose market scope</option>
+                                    <option value="international" class="text-white">🌍 International Market</option>
+                                    <option value="national" class="text-white">🏠 National Only</option>
+                                </select>
+                                @error('market_type')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Unit Price ($)</flux:label>
-                                <flux:input 
+                                <label class="block text-sm font-semibold text-gray-300">Unit Price ($)</label>
+                                <input 
                                     type="number" 
                                     name="price" 
                                     placeholder="0.00" 
                                     step="0.01" 
                                     min="0" 
                                     required 
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                                 />
-                                <flux:error name="price" class="text-red-500 text-sm" />
+                                @error('price')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700">Available Quantity</flux:label>
-                                <flux:input 
+                                <label class="block text-sm font-semibold text-gray-300">Available Quantity</label>
+                                <input 
                                     type="number" 
                                     name="quantity" 
                                     placeholder="Stock amount" 
                                     min="1" 
                                     required 
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                                 />
-                                <flux:error name="quantity" class="text-red-500 text-sm" />
+                                @error('quantity')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-                        <flux:button 
-                            variant="outline" 
+                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-600">
+                        <button 
                             type="button" 
                             onclick="window.location='{{ route('weapons.index') }}'"
-                            class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
+                            class="px-6 py-3 border-2 border-gray-500 text-gray-300 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all duration-200 font-medium"
                         >
                             Cancel
-                        </flux:button>
-                        <flux:button 
+                        </button>
+                        <button 
                             type="submit" 
                             class="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
                         >
                             🚀 Deploy Weapon
-                        </flux:button>
+                        </button>
                     </div>
                 </form>
             </div>

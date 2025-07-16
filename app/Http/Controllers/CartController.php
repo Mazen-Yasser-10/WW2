@@ -3,60 +3,125 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\WeaponListing;
+use App\Models\Cart;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 class CartController extends Controller
 {
-    /**
-     * Display the cart.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {        
-        // Logic to retrieve and return the cart items
-        return view('cart'); 
+        $cartItems = Cart::where('user_id', Auth::id())
+            ->where('status', 'open')
+            ->with(['orders.weaponListing.weapon.weaponType', 'orders.weaponListing.weapon.country'])
+            ->get();
+
+        $totalAmount = 0;
+        $totalItems = 0;
+        
+        foreach ($cartItems as $cart) {
+            foreach ($cart->orders as $order) {
+                $totalAmount += $order->total_price;
+                $totalItems += $order->quantity;
+            }
+        }
+
+        return view('cart', compact('cartItems', 'totalAmount', 'totalItems')); 
     }
-    /**
-     * Add an item to the cart.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function add(Request $request)
+    public function addToCart(Request $request, $weaponListingId)
     {
-        // Logic to add an item to the cart
-        return redirect()->route('cart.index')->with('success', 'Item added to cart successfully.');
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $weaponListing = WeaponListing::findOrFail($weaponListingId);
+        DB::transaction(function () use ($request, $weaponListing) {
+            $cart = Cart::create([
+                'user_id' => Auth::id(),
+                'status' => 'open'
+            ]);
+
+            Order::create([
+                'cart_id' => $cart->id,
+                'weapon_listing_id' => $weaponListing->id,
+                'quantity' => $request->quantity,
+                'total_price' => $weaponListing->price * $request->quantity,
+            ]);
+
+            $weaponListing->decrement('quantity', $request->quantity);
+            
+            if ($weaponListing->quantity <= 0) {
+                $weaponListing->update(['is_available' => false]);
+            }
+        });
+
+        return redirect()->route('weapons.index')->with('success', 'Weapon added to cart.');
+
     }
-    /**
-     * Remove an item from the cart.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function remove($id)
     {
-        // Logic to remove an item from the cart
+        $order = Order::findOrFail($id);
+        
+        $cart = Cart::where('user_id', Auth::id())->where('id', $order->cart_id)->first();
+        
+        if (!$cart) {
+            return redirect()->route('cart.index')->with('error', 'Unauthorized action.');
+        }
+
+        $order->weaponListing->increment('quantity', $order->quantity);
+        $order->weaponListing->update(['is_available' => true]);
+        
+        $order->delete();
+        
+        if ($cart->orders()->count() === 0) {
+            $cart->delete();
+        }
+
         return redirect()->route('cart.index')->with('success', 'Item removed from cart successfully.');
     }
-    /**
-     * Clear the cart.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function clear()
     {
-        // Logic to clear the cart
+        $carts = Cart::where('user_id', Auth::id())->where('status', 'open')->get();
+        
+        foreach ($carts as $cart) {
+            foreach ($cart->orders as $order) {
+                $order->weaponListing->increment('quantity', $order->quantity);
+                $order->weaponListing->update(['is_available' => true]);
+            }
+            $cart->delete();
+        }
+        
         return redirect()->route('cart.index')->with('success', 'Cart cleared successfully.');  
     }
-    /**
-     * Proceed to checkout.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function checkout()
+    public function checkout(Request $request)
     {
-        // Logic to proceed to checkout
-        return redirect()->route('orders.create')->with('success', 'Proceeding to checkout.');
+        $cart = Cart::where('user_id', Auth::id())
+            ->where('status', 'open')
+            ->with('orders.weaponListing')
+            ->firstOrFail();
+        if(Auth::user()->cash < $cart->orders->sum('total_price')) {
+            return redirect()->route('cart.index')->with('error', 'Insufficient funds to complete the order.');
+        }
+
+        DB::transaction(function () use ($cart) {
+            foreach ($cart->orders as $order) {
+                if (!$order->weaponListing->is_available || 
+                    $order->weaponListing->quantity < $order->quantity) {
+                    throw new \Exception("Item {$order->weaponListing->weapon->name} is no longer available");
+                }
+            }
+
+            $cart->update(['status' => 'submitted']);
+            
+        });
+
+        $this->clear();
+        
+        return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
     }
     
 }
