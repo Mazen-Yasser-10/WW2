@@ -8,17 +8,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Attachment;
 
-class Mail extends Mailable
+class MailMessage extends Mailable
 {
     use Queueable, SerializesModels;
-
+    public string $qrCodeUrl;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(string $qrCodeUrl)
     {
-        //
+        $this->qrCodeUrl = $qrCodeUrl;
     }
 
     /**
@@ -27,7 +28,7 @@ class Mail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mail',
+            subject: 'WW2',
         );
     }
 
@@ -37,7 +38,7 @@ class Mail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.qr',
         );
     }
 
@@ -48,6 +49,10 @@ class Mail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        return [
+            Attachment::fromPath(storage_path($this->qrCodeUrl))
+                ->as('qrcode.png')
+                ->withMime('image/png'),
+        ];
     }
 }
