@@ -1,15 +1,20 @@
 <x-layouts.app :title="__('My Orders')">
     <div class="min-h-screen bg-gray-900 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Header -->
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h1 class="text-4xl font-bold text-white mb-2">📋 Military Orders Command</h1>
                     <p class="text-gray-400">Monitor and manage all operational deployments</p>
                 </div>
+                <a href="{{ route('orders.index') }}"
+                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to orders
+                </a>
             </div>
             @if($orders->isEmpty())
-                <!-- Empty State -->
                 <div class="bg-gray-800 rounded-2xl shadow-2xl p-12 text-center border border-gray-700">
                     <div class="w-32 h-32 mx-auto mb-6 bg-gray-700 rounded-full flex items-center justify-center">
                         <svg class="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,23 +25,16 @@
                     <p class="text-gray-400 mb-8">No military operations have been deployed yet.</p>
                 </div>
             @else
-                <!-- Orders Table -->
                 <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
                     
                     <div class="bg-gradient-to-r from-red-800 to-red-900 px-8 py-6">
                         
-                        <h2 class="text-2xl font-bold text-white flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-white flex items-center">
                             ⚔️ Active Operations
                             
                             <span class="ml-4 bg-red-700 text-red-100 px-3 py-1 rounded-full text-sm font-medium">
                                 {{ $orders->count() }} Orders
                             </span>
-                            <flux:button variant="ghost" href="{{ route('orders.index') }}" class="bg-gray-700 hover:bg-gray-600 text-white border-gray-600">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                                </svg>
-                                Back to orders
-                            </flux:button>
                         </h2>
                     </div>
 
@@ -102,7 +100,7 @@
                                                         {{ $order->weaponListing->weapon->weaponType->name ?? 'Unknown Type' }}
                                                     </span>
                                                     <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-green-900/50 text-green-300">
-                                                        🌍 {{ $order->weaponListing->weapon->country->name ?? 'Unknown' }}
+                                                        🌍 {{ $order->weaponListing->country->name ?? 'Unknown' }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -138,7 +136,6 @@
                         </table>
                     </div>
 
-                    <!-- Table Footer -->
                     <div class="bg-gray-700/50 px-8 py-4 border-t border-gray-600">
                         <div class="flex items-center justify-between">
                             <div class="text-gray-400 text-sm">

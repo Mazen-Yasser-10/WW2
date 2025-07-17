@@ -3,7 +3,7 @@
     <div class="bg-gradient-to-br from-gray-900 via-red-900 to-gray-800 py-8 mb-8">
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center">
-                <h1 class="text-4xl font-bold text-white mb-2">WW2 Weapons Marketplace</h1>
+                <h1 class="text-4xl font-bold text-white mb-2">WWII Weapons Marketplace</h1>
                 <p class="text-gray-300">Military Equipment Trading Platform</p>
             </div>
         </div>
@@ -22,16 +22,33 @@
                     <div>
                         <h2 class="text-2xl font-bold text-white">Weapons Arsenal</h2>
                         <p class="text-gray-400">Military Equipment Inventory</p>
+                        @if(isset($selectedCountry))
+                            <div class="flex items-center mt-1">
+                                <span class="text-xs bg-blue-900 text-blue-200 px-2 py-1 rounded-full">
+                                    💱 Prices in {{ ucfirst(str_replace('_', ' ', $selectedCountry)) }} Currency
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </div>
-                @if(auth()->user()->role === 'government')
-                    <flux:button variant="primary" href="{{ route('weapons.create') }}" class="bg-red-600 hover:bg-red-700">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                        Add New Weapon
-                    </flux:button>
-                @endif
+                <div class="flex space-x-3">
+                    @auth
+                        <flux:button variant="outline" href="{{ route('orders.send-order-form') }}" class="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 3.26a2 2 0 001.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            Send Order
+                        </flux:button>
+                    @endauth
+                    @if(auth()->user()->role === 'admin')
+                        <flux:button variant="primary" href="{{ route('weapons.create') }}" class="bg-green-600 hover:bg-green-700">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Add New Weapon
+                        </flux:button>
+                    @endif
+                </div>
             </div>
 
             <!-- Filters -->
@@ -157,7 +174,10 @@
                                                     {{ ucfirst($weapon->market_type) }}
                                                 </span>
                                             </div>
-                                            <span class="text-xl font-bold text-green-400">${{ number_format($weapon->price, 2) }}</span>
+                                            <div class="text-right">
+                                                <span class="text-xl font-bold text-green-400">{{ $weapon->local_price }}</span>
+                                                <div class="text-xs text-gray-400">${{ number_format($weapon->price, 2) }} USD</div>
+                                            </div>
                                         </div>
                                         <div class="text-sm text-gray-400">
                                             <span class="font-medium">{{ $weapon->quantity }}</span> units available

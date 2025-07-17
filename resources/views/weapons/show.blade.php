@@ -32,6 +32,13 @@
                     <div>
                         <h2 class="text-2xl font-bold text-white">{{ $weapon->name }}</h2>
                         <p class="text-gray-400">{{ $weapon->country->name }} • {{ $weapon->weapon->weaponType->name }}</p>
+                        @if(isset($selectedCountry))
+                            <div class="flex items-center mt-1">
+                                <span class="text-xs bg-blue-900 text-blue-200 px-2 py-1 rounded-full">
+                                    💱 Prices in {{ ucfirst(str_replace('_', ' ', $selectedCountry)) }} Currency
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="flex space-x-3">
@@ -73,7 +80,10 @@
                         <div class="space-y-3">
                             <div class="flex justify-between items-center py-2 border-b border-gray-600">
                                 <span class="text-gray-400">Price</span>
-                                <span class="text-green-400 font-bold text-lg">${{ number_format($weapon->price, 2) }}</span>
+                                <div class="text-right">
+                                    <span class="text-green-400 font-bold text-lg">{{ $weapon->local_price }}</span>
+                                    <div class="text-xs text-gray-500">${{ number_format($weapon->price, 2) }} USD</div>
+                                </div>
                             </div>
                             <div class="flex justify-between items-center py-2 border-b border-gray-600">
                                 <span class="text-gray-400">Available</span>
@@ -156,7 +166,7 @@
                                 <p class="text-gray-400">Direct purchase from military supplier</p>
                             </div>
                             <div class="text-right">
-                                <div class="text-2xl font-bold text-green-400">${{ number_format($weapon->price, 2) }}</div>
+                                <div class="text-2xl font-bold text-green-400">{{ $weapon->local_price }}</div>
                                 <div class="text-sm text-gray-400">per unit</div>
                             </div>
                         </div>
@@ -207,7 +217,7 @@
                                     <div class="flex-1">
                                         <label class="block text-sm font-medium text-gray-300 mb-2">Total Price</label>
                                         <div class="bg-gray-600 border border-gray-500 rounded-lg px-4 py-3">
-                                            <span id="totalPrice" class="text-xl font-bold text-green-400">${{ number_format($weapon->price, 2) }}</span>
+                                            <span id="totalPrice" class="text-xl font-bold text-green-400">{{ $weapon->local_price }}</span>
                                         </div>
                                     </div>
                                 </div>

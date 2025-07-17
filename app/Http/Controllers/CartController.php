@@ -8,6 +8,9 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Country;
+use App\Models\User;
+use App\Services\CurrencyConverter;
 
 class CartController extends Controller
 {
@@ -18,17 +21,26 @@ class CartController extends Controller
             ->with(['orders.weaponListing.weapon.weaponType', 'orders.weaponListing.weapon.country'])
             ->get();
 
+        $converter = app('CurrencyConverter');
+        $user = Auth::user();
+        $selectedCountry = $user->country->name;
+
         $totalAmount = 0;
         $totalItems = 0;
         
         foreach ($cartItems as $cart) {
             foreach ($cart->orders as $order) {
+                $order->local_price = $converter->convertWithSymbol($order->total_price, $selectedCountry);
+                $order->unit_local_price = $converter->convertWithSymbol($order->weaponListing->price, $selectedCountry);
+                
                 $totalAmount += $order->total_price;
                 $totalItems += $order->quantity;
             }
         }
 
-        return view('cart', compact('cartItems', 'totalAmount', 'totalItems')); 
+        $totalLocalAmount = $converter->convertWithSymbol($totalAmount, $selectedCountry);
+
+        return view('cart', compact('cartItems', 'totalAmount', 'totalItems', 'totalLocalAmount', 'selectedCountry')); 
     }
     public function addToCart(Request $request, $weaponListingId)
     {
@@ -111,11 +123,14 @@ class CartController extends Controller
             foreach ($cart->orders as $order) {
                 if (!$order->weaponListing->is_available || 
                     $order->weaponListing->quantity < $order->quantity) {
-                    throw new \Exception("Item {$order->weaponListing->weapon->name} is no longer available");
+                    return redirect()->route('cart.index')->with('error', "Item {$order->weaponListing->weapon->name} is no longer available");
                 }
             }
 
             $cart->update(['status' => 'submitted']);
+            $user = User::findOrFail(Auth::id());
+            $user->decrement('cash', $cart->orders->sum('total_price'));
+            $user->save();
             
         });
 

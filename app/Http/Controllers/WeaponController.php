@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Weapon;
 use App\Models\WeaponListing;
-
 use App\Models\WeaponType;
 use App\Models\Cart;
 use App\Models\Order;
@@ -37,18 +36,30 @@ class WeaponController extends Controller
         $weaponTypes = WeaponType::all();
         $countries = Country::all();
 
-        return view('weapons.index', compact('weapons', 'weaponTypes', 'countries'));
+        $converter = app('CurrencyConverter');
+        $user = Auth::user();
+        $selectedCountry = $user->country->name;
+        
+        foreach ($weapons as $weapon) {
+            $weapon->local_price = $converter->convertWithSymbol($weapon->price, $selectedCountry);
+            $weapon->currency_symbol = $converter->getCurrencySymbol($selectedCountry);
+        }
+
+        return view('weapons.index', compact('weapons', 'weaponTypes', 'countries', 'selectedCountry'));
     }
 
     public function show($id)
-
     {
         $weapon = WeaponListing::with(['weapon', 'country'])
             ->findOrFail($id);
         
+        $converter = app('CurrencyConverter');
+        $user = Auth::user();
+        $selectedCountry = $user->country->name;
+        $weapon->local_price = $converter->convertWithSymbol($weapon->price, $selectedCountry);
+        $weapon->currency_symbol = $converter->getCurrencySymbol($selectedCountry);
 
-        return view('weapons.show', compact('weapon'));
-
+        return view('weapons.show', compact('weapon', 'selectedCountry'));
     }
 
     public function create()

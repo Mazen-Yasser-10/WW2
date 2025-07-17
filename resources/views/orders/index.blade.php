@@ -119,7 +119,7 @@
                                                         {{ $order->weaponListing->weapon->weaponType->name ?? 'Unknown Type' }}
                                                     </span>
                                                     <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-green-900/50 text-green-300">
-                                                        🌍 {{ $order->weaponListing->weapon->country->name ?? 'Unknown' }}
+                                                        🌍 {{ $order->weaponListing->country->name ?? 'Unknown' }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -130,12 +130,12 @@
                                                 <span class="text-gray-400 ml-2">units</span>
                                             </div>
                                             <p class="text-gray-400 text-sm">
-                                                ${{ number_format($order->weaponListing->price ?? 0, 2) }} each
+                                                {{ $order->local_price }} each
                                             </p>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-2xl font-bold text-green-400">
-                                                ${{ number_format($order->total_price, 2) }}
+                                                {{ $order->total_local_price }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
