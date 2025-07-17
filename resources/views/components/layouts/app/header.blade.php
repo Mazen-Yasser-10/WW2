@@ -12,8 +12,8 @@
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
+                <flux:navbar.item icon="layout-grid" :href="route('weapons.index')" :current="request()->routeIs('weapons.index')" wire:navigate>
+                    {{ __('Marketplace') }}
                 </flux:navbar.item>
             </flux:navbar>
 
@@ -92,14 +92,14 @@
         <flux:sidebar stashable sticky class="lg:hidden border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <a href="{{ route('dashboard') }}" class="ms-1 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
+            <a href="{{ route('weapons.index') }}" class="ms-1 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
                 <x-app-logo />
             </a>
 
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')">
-                    <flux:navlist.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                    {{ __('Dashboard') }}
+                    <flux:navlist.item icon="layout-grid" :href="route('weapons.index')" :current="request()->routeIs('weapons.index')" wire:navigate>
+                    {{ __('Marketplace') }}
                     </flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>

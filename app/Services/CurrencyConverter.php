@@ -11,25 +11,20 @@ class CurrencyConverter
     {
         $this->from_dolar_to_curr =
             [
-                'Germany' => 0.5,
-                'England' => 1.5,
-                'Soviet_Union' => 0.2,
-                'Switzerland' => 1.0
-            ];
-            'Germany' => 2.5,
-            'England' => 0.25,
-            'United Kingdom' => 0.25,
-            'Soviet Union' => 5.3,
-            'Switzerland' => 4.3
+                'Germany' => 2.5,
+                'England' => 0.25,
+                'United Kingdom' => 0.25,
+                'Soviet Union' => 5.3,
+                'Switzerland' => 4.3
             ];
             
         $this->currency_symbols = [
-            'Germany' => 'RM',
-            'England' => '£',
-            'United Kingdom' => '£',         
-            'Soviet Union' => '₽',
-            'Switzerland' => 'CHF'
-        ];
+                'Germany' => 'RM',
+                'England' => '£',
+                'United Kingdom' => '£',         
+                'Soviet Union' => '₽',
+                'Switzerland' => 'CHF'
+            ];
     }
 
     public function convert($amount, $country)
@@ -37,12 +32,6 @@ class CurrencyConverter
         $converted = $amount * $this->from_dolar_to_curr[$country];
         return $converted;
     }
-}
-        $country = ucwords(strtolower($country));
-        $converted = $amount * ($this->from_dolar_to_curr[$country] ?? $amount);
-        return $converted;
-    }
-    
     public function getCurrencySymbol($country)
     {
         $country = ucwords(strtolower($country));

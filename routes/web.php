@@ -93,9 +93,6 @@ Route::post('user/add-funds', [UserCashController::class, 'addFunds'])
     ->middleware(['auth'])
     ->name('user.add-funds');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
 
