@@ -44,53 +44,53 @@ Route::post('/emails/qr/{filename}',[QrCodeController::class,'convertCsvToQr'])
     ->middleware(['auth','verified'])
     ->name('emails.qr.post');
 Route::get('cart', [CartController::class, 'index'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('cart.index');
 Route::get('/weapons/index', [WeaponController::class, 'index'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('weapons.index'); 
 Route::get('orders', [OrderController::class, 'index'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('orders.index');
 Route::get('orders/user_orders', [OrderController::class, 'showByUser'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('orders.user_orders');
 Route::get('orders/send-order', [OrderController::class, 'showSendOrderForm'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('orders.send-order-form');
 Route::post('orders/send-email', [OrderController::class, 'sendOrderEmail'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('orders.send-email');
 Route::get('weapons/show/{weapon}', [WeaponController::class, 'show'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('weapons.show');
 Route::get('weapons/create', [WeaponController::class, 'create'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('weapons.create');
 Route::post('weapons/store', [WeaponController::class, 'store'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('weapons.store');
 Route::get('weapons/{weapon}/edit', [WeaponController::class, 'edit'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('weapons.edit');
 Route::put('weapons/{weapon}', [WeaponController::class, 'update'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('weapons.update');
 Route::post('carts/add/{weapon}', [CartController::class, 'addToCart'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('cart.add');
 Route::delete('cart/remove/{order}', [CartController::class, 'remove'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('cart.remove');
 Route::delete('cart/clear', [CartController::class, 'clear'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('cart.clear');
 Route::post('cart/checkout', [CartController::class, 'checkout'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('cart.checkout');
 
 Route::post('user/add-funds', [UserCashController::class, 'addFunds'])
-    ->middleware(['auth'])
+    ->middleware(['auth', 'verified'])
     ->name('user.add-funds');
 
 Route::middleware(['auth'])->group(function () {
