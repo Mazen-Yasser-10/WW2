@@ -29,7 +29,7 @@ class CurrencyConverter
 
     public function convert($amount, $country)
     {
-        $converted = $amount * $this->from_dolar_to_curr[$country];
+        $converted = $amount * ($this->from_dolar_to_curr[$country] ?? 1);
         return $converted;
     }
     public function getCurrencySymbol($country)

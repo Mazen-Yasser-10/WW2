@@ -13,7 +13,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     public function sendVerification(): void
     {
         if (Auth::user()->hasVerifiedEmail()) {
-            $this->redirectIntended(default: route('weapons.indexndex', absolute: false), navigate: true);
+            $this->redirectIntended(default: route('weapons.index', absolute: false), navigate: true);
 
             return;
         }
