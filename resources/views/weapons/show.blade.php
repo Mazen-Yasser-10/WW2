@@ -48,7 +48,7 @@
                         </svg>
                         Back to Market
                     </flux:button>
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role === 'general')
                         <flux:button variant="primary" href="{{ route('weapons.edit', $weapon) }}" class="bg-blue-600 hover:bg-blue-700">
                             Edit Weapon
                         </flux:button>

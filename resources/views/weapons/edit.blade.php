@@ -14,133 +14,117 @@
         </div>
 
         <!-- Main Form Card -->
-        <div class="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
-            <div class="bg-gradient-to-r from-amber-600 to-amber-700 px-8 py-6">
+        <div class="bg-gray-800 rounded-2xl shadow-xl border border-gray-700 overflow-hidden">
+            <div class="bg-gradient-to-r from-red-600 to-red-700 px-8 py-6">
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
                         <span class="text-2xl">🔧</span>
                     </div>
                     <div>
                         <h2 class="text-2xl font-bold text-white">Weapon Modifications</h2>
-                        <p class="text-amber-100">Update your weapon's details and market availability</p>
+                        <p class="text-red-100">Update your weapon's details and market availability</p>
                     </div>
                 </div>
             </div>
 
-            <div class="p-8 bg-black">
+            <div class="p-8">
                 <form action="{{ route('weapons.update', $weapon) }}" method="POST" class="space-y-8">
                     @csrf
                     @method('PUT')
                     
                     <!-- Basic Information Section -->
                     <div class="space-y-6">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
-                                <span class="text-xl">⚙️</span>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-1">Basic Information</h3>
-                                <p class="text-gray-600">Modify the core properties of your weapon</p>
-                            </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h3 class="text-xl font-semibold text-white mb-1">Basic Information</h3>
+                            <p class="text-gray-400">Modify the core properties of your weapon</p>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
-                                    <span>🏷️</span>
-                                    <span>Weapon Name</span>
-                                </flux:label>
-                                <flux:input 
+                                <label class="block text-sm font-semibold text-gray-300">🏷️ Weapon Name</label>
+                                <input 
+                                    type="text"
                                     name="name" 
                                     value="{{ old('name', $weapon->name) }}"
                                     placeholder="e.g., M1 Garand, Tiger Tank" 
                                     required 
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all duration-200 hover:border-gray-300"
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
                                 />
-                                <flux:error name="name" class="text-red-500 text-sm" />
+                                @error('name')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
-                                    <span>🎯</span>
-                                    <span>Weapon Type</span>
-                                </flux:label>
-                                <flux:select 
+                                <label class="block text-sm font-semibold text-gray-300">🎯 Weapon Type</label>
+                                <select 
                                     name="weapon_type_id" 
-                                    placeholder="Select weapon category"
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all duration-200 hover:border-gray-300"
-                                >
+                                    required
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200">
+                                    <option value="" class="text-gray-400">Select weapon category</option>
                                     @foreach($weaponTypes as $type)
-                                        <option value="{{ $type->id }}" {{ old('weapon_type_id', $weapon->weapon_type_id) == $type->id ? 'selected' : '' }}>
+                                        <option value="{{ $type->id }}" {{ old('weapon_type_id', $weapon->weapon_type_id) == $type->id ? 'selected' : '' }} class="text-white">
                                             {{ $type->name }}
                                         </option>
                                     @endforeach
-                                </flux:select>
-                                <flux:error name="weapon_type_id" class="text-red-500 text-sm" />
+                                </select>
+                                @error('weapon_type_id')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
-                                    <span>🌍</span>
-                                    <span>Manufacturing Country</span>
-                                </flux:label>
-                                <flux:select 
+                                <label class="block text-sm font-semibold text-gray-300">🌍 Manufacturing Country</label>
+                                <select 
                                     name="country_id" 
-                                    placeholder="Select manufacturing nation"
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all duration-200 hover:border-gray-300"
-                                >
+                                    required
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200">
+                                    <option value="" class="text-gray-400">Select manufacturing nation</option>
                                     @foreach($countries as $country)
-                                        <option value="{{ $country->id }}" {{ old('country_id', $weapon->country_id) == $country->id ? 'selected' : '' }}>
-                                            {{ $country->name }}
+                                        <option value="{{ $country->id }}" {{ old('country_id', $weapon->country_id) == $country->id ? 'selected' : '' }} class="text-white">
+                                            🏳️ {{ $country->name }}
                                         </option>
                                     @endforeach
-                                </flux:select>
-                                <flux:error name="country_id" class="text-red-500 text-sm" />
+                                </select>
+                                @error('country_id')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
 
                     <!-- Market Configuration Section -->
                     <div class="space-y-6">
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <span class="text-xl">💰</span>
-                            </div>
-                            <div>
-                                <h3 class="text-xl font-semibold text-gray-900 mb-1">Market Configuration</h3>
-                                <p class="text-gray-600">Update pricing and availability for the global market</p>
-                            </div>
+                        <div class="border-l-4 border-red-500 pl-4">
+                            <h3 class="text-xl font-semibold text-white mb-1">Market Configuration</h3>
+                            <p class="text-gray-400">Update pricing and availability for the global market</p>
                         </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
-                                    <span>🌐</span>
-                                    <span>Market Availability</span>
-                                </flux:label>
-                                <flux:select 
+                                <label class="block text-sm font-semibold text-gray-300">🌐 Market Availability</label>
+                                <select 
                                     name="market_type" 
-                                    placeholder="Choose market scope"
-                                    class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 hover:border-gray-300"
-                                >
-                                    <option value="international" {{ old('market_type', $weapon->weaponListing->market_type ?? '') == 'international' ? 'selected' : '' }}>
+                                    required
+                                    class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200">
+                                    <option value="" class="text-gray-400">Choose market scope</option>
+                                    <option value="international" {{ old('market_type', $weapon->weaponListing->market_type ?? '') == 'international' ? 'selected' : '' }} class="text-white">
                                         🌍 International Market
                                     </option>
-                                    <option value="national" {{ old('market_type', $weapon->weaponListing->market_type ?? '') == 'national' ? 'selected' : '' }}>
+                                    <option value="national" {{ old('market_type', $weapon->weaponListing->market_type ?? '') == 'national' ? 'selected' : '' }} class="text-white">
                                         🏠 National Only
                                     </option>
-                                </flux:select>
-                                <flux:error name="market_type" class="text-red-500 text-sm" />
+                                </select>
+                                @error('market_type')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
-                                    <span>💵</span>
-                                    <span>Unit Price ($)</span>
-                                </flux:label>
+                                <label class="block text-sm font-semibold text-gray-300">💵 Unit Price ($)</label>
                                 <div class="relative">
-                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">$</span>
-                                    <flux:input 
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 font-medium">$</span>
+                                    <input 
                                         type="number" 
                                         name="price" 
                                         value="{{ old('price', $weapon->weaponListing->price ?? '') }}"
@@ -148,63 +132,63 @@
                                         step="0.01" 
                                         min="0" 
                                         required 
-                                        class="w-full pl-8 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 hover:border-gray-300"
+                                        class="w-full pl-8 pr-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
                                         oninput="updatePricePreview(this.value)"
                                     />
                                 </div>
-                                <div id="price-preview" class="text-xs text-gray-500 mt-1">
+                                <div id="price-preview" class="text-xs text-gray-400 mt-1">
                                     Base price in USD
                                 </div>
-                                <flux:error name="price" class="text-red-500 text-sm" />
+                                @error('price')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
 
                             <div class="space-y-2">
-                                <flux:label class="text-sm font-semibold text-gray-700 flex items-center space-x-2">
-                                    <span>📦</span>
-                                    <span>Available Quantity</span>
-                                </flux:label>
+                                <label class="block text-sm font-semibold text-gray-300">📦 Available Quantity</label>
                                 <div class="relative">
-                                    <flux:input 
+                                    <input 
                                         type="number" 
                                         name="quantity" 
                                         value="{{ old('quantity', $weapon->weaponListing->quantity ?? '') }}"
                                         placeholder="Stock amount" 
                                         min="1" 
                                         required 
-                                        class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200 hover:border-gray-300"
+                                        class="w-full px-4 py-3 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all duration-200"
                                         oninput="updateStockIndicator(this.value)"
                                     />
                                     <div class="mt-2 flex items-center space-x-2">
-                                        <div class="flex-1 bg-gray-200 rounded-full h-2">
-                                            <div id="stock-bar" class="h-full bg-green-500 rounded-full transition-all duration-300" style="width: {{ min(($weapon->weaponListing->quantity ?? 0) / 100 * 100, 100) }}%"></div>
+                                        <div class="flex-1 bg-gray-600 rounded-full h-2">
+                                            <div id="stock-bar" class="h-full bg-red-500 rounded-full transition-all duration-300" style="width: {{ min(($weapon->weaponListing->quantity ?? 0) / 100 * 100, 100) }}%"></div>
                                         </div>
-                                        <span id="stock-text" class="text-xs text-gray-500">{{ $weapon->weaponListing->quantity ?? 0 }} units</span>
+                                        <span id="stock-text" class="text-xs text-gray-400">{{ $weapon->weaponListing->quantity ?? 0 }} units</span>
                                     </div>
                                 </div>
-                                <flux:error name="quantity" class="text-red-500 text-sm" />
+                                @error('quantity')
+                                    <span class="text-red-400 text-sm">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-                        <flux:button 
-                            variant="outline" 
+                    <div class="flex justify-end space-x-4 pt-6 border-t border-gray-700">
+                        <button 
                             type="button" 
                             onclick="window.location='{{ route('weapons.show', $weapon) }}'"
-                            class="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium hover:border-gray-400 hover:shadow-md"
+                            class="px-6 py-3 bg-gray-700 border-2 border-gray-600 text-gray-300 rounded-lg hover:bg-gray-600 hover:border-gray-500 transition-all duration-200 font-medium"
                         >
                             ↩️ Cancel
-                        </flux:button>
-                        <flux:button 
+                        </button>
+                        <button 
                             type="submit" 
-                            class="px-8 py-3 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg hover:from-amber-700 hover:to-amber-800 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
+                            class="px-8 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 font-bold shadow-lg hover:shadow-xl transform hover:scale-105"
                         >
                             <span class="flex items-center space-x-2">
                                 <span>🔧</span>
                                 <span>Update Weapon</span>
                             </span>
-                        </flux:button>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -218,13 +202,17 @@
         const percentage = Math.min((value / 100) * 100, 100);
         document.getElementById('stock-bar').style.width = percentage + '%';
         document.getElementById('stock-text').textContent = `${value} units`;
-        document.getElementById('preview-stock').textContent = `📦 ${value} in stock`;
+        if (document.getElementById('preview-stock')) {
+            document.getElementById('preview-stock').textContent = `📦 ${value} in stock`;
+        }
     }
 
     function updatePricePreview(price) {
         if (!price || price <= 0) {
             document.getElementById('price-preview').textContent = 'Base price in USD';
-            document.getElementById('preview-price').textContent = '$0.00';
+            if (document.getElementById('preview-price')) {
+                document.getElementById('preview-price').textContent = '$0.00';
+            }
             return;
         }
 
@@ -236,14 +224,18 @@
             switzerland: 4.3
         };
 
-        // Update currency preview
-        document.getElementById('price-germany').textContent = (price * rates.germany).toFixed(2) + ' RM';
-        document.getElementById('price-england').textContent = '£' + (price * rates.england).toFixed(2);
-        document.getElementById('price-soviet').textContent = (price * rates.soviet).toFixed(2) + ' ₽';
-        document.getElementById('price-switzerland').textContent = (price * rates.switzerland).toFixed(2) + ' CHF';
+        // Update currency preview if elements exist
+        if (document.getElementById('price-germany')) {
+            document.getElementById('price-germany').textContent = (price * rates.germany).toFixed(2) + ' RM';
+            document.getElementById('price-england').textContent = '£' + (price * rates.england).toFixed(2);
+            document.getElementById('price-soviet').textContent = (price * rates.soviet).toFixed(2) + ' ₽';
+            document.getElementById('price-switzerland').textContent = (price * rates.switzerland).toFixed(2) + ' CHF';
+        }
         
         // Update main preview
-        document.getElementById('preview-price').textContent = '$' + parseFloat(price).toFixed(2);
+        if (document.getElementById('preview-price')) {
+            document.getElementById('preview-price').textContent = '$' + parseFloat(price).toFixed(2);
+        }
     }
 
     // Update weapon name in preview
