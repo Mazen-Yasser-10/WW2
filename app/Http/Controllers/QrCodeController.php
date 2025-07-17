@@ -16,6 +16,7 @@ class QrCodeController extends Controller
         $qrCodeUrl = $qrgenerator->fromCsv($path);
         Mail::to($request->email)->send(new MailMessage($qrCodeUrl));
         Storage::disk('public')->delete('qrcode.png');
+        Storage::disk('public')->delete('orders/' . $filename);
         return redirect()->back()->with('success', 'QR Code sent to your email successfully.');
     }
 }
