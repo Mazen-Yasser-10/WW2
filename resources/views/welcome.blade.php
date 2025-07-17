@@ -360,6 +360,7 @@
                 <div class="text-center">
                     <div class="text-2xl font-bold text-white">1939-1945</div>
                     <div class="text-xs text-gray-400">War Period</div>
+
                 </div>
                 <div class="text-center">
                     <div class="text-2xl font-bold text-white">4</div>

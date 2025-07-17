@@ -1,7 +1,6 @@
 <x-layouts.app :title="__('Shopping Cart')">
     <div class="min-h-screen bg-gray-900 py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Header -->
             @if(session('error'))
                 <div class="bg-red-900/50 border border-red-800 text-red-300 px-6 py-4 rounded-xl mb-6">
                     <div class="flex items-center">
@@ -15,10 +14,16 @@
             <div class="text-center mb-8">
                 <h1 class="text-4xl font-bold text-white mb-2">🛒 Your Arsenal Cart</h1>
                 <p class="text-gray-400">Review your selected weapons before deployment</p>
+                @if(isset($selectedCountry))
+                    <div class="flex justify-center mt-3">
+                        <span class="text-xs bg-blue-900 text-blue-200 px-3 py-1 rounded-full">
+                            💱 Prices displayed in {{ ucfirst(str_replace('_', ' ', $selectedCountry)) }} Currency
+                        </span>
+                    </div>
+                @endif
             </div>
 
             @if($cartItems->isEmpty())
-                <!-- Empty Cart -->
                 <div class="bg-gray-800 rounded-2xl shadow-2xl p-12 text-center">
                     <div class="w-32 h-32 mx-auto mb-6 bg-gray-700 rounded-full flex items-center justify-center">
                         <svg class="w-16 h-16 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,16 +41,13 @@
                     </a>
                 </div>
             @else
-                <!-- Cart Items -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Cart Items List -->
                     <div class="lg:col-span-2 space-y-6">
                         @foreach($cartItems as $cart)
                             @foreach($cart->orders as $order)
                                 <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden hover:border-gray-600 transition-all duration-300">
                                     <div class="p-6">
                                         <div class="flex items-center space-x-6">
-                                            <!-- Weapon Image Placeholder -->
                                             <div class="w-24 h-24 bg-gradient-to-br from-gray-700 to-gray-600 rounded-xl flex items-center justify-center flex-shrink-0">
                                                 <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -94,13 +96,15 @@
                                                             <span class="bg-gray-700 px-3 py-1 rounded-lg text-white font-medium">{{ $order->quantity }}</span>
                                                         </div>
                                                         <div class="text-sm text-gray-400">
-                                                            ${{ number_format($order->weaponListing->price, 2) }} × {{ $order->quantity }}
+                                                            {{ $order->unit_local_price }} × {{ $order->quantity }}
+                                                            <div class="text-xs">${{ number_format($order->weaponListing->price, 2) }} USD each</div>
                                                         </div>
                                                     </div>
                                                     <div class="text-right">
                                                         <div class="text-2xl font-bold text-green-400">
-                                                            ${{ number_format($order->total_price, 2) }}
+                                                            {{ $order->local_price }}
                                                         </div>
+                                                        <div class="text-xs text-gray-500">${{ number_format($order->total_price, 2) }} USD</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -123,7 +127,10 @@
                                 </div>
                                 <div class="flex justify-between text-gray-400">
                                     <span>Subtotal:</span>
-                                    <span class="font-medium text-white">${{ number_format($totalAmount, 2) }}</span>
+                                    <div class="text-right">
+                                        <span class="font-medium text-white">{{ $totalLocalAmount }}</span>
+                                        <div class="text-xs text-gray-500">${{ number_format($totalAmount, 2) }} USD</div>
+                                    </div>
                                 </div>
                                 <div class="flex justify-between text-gray-400">
                                     <span>Shipping:</span>
@@ -132,7 +139,10 @@
                                 <div class="border-t border-gray-700 pt-4">
                                     <div class="flex justify-between">
                                         <span class="text-xl font-bold text-white">Total:</span>
-                                        <span class="text-2xl font-bold text-green-400">${{ number_format($totalAmount, 2) }}</span>
+                                        <div class="text-right">
+                                            <span class="text-2xl font-bold text-green-400">{{ $totalLocalAmount }}</span>
+                                            <div class="text-xs text-gray-500">${{ number_format($totalAmount, 2) }} USD</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

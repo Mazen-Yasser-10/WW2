@@ -14,32 +14,35 @@ Route::get('/', function ()
 })->name('home');
 
 
-Route::get('/England', function () // 1
+Route::get('/England', function ()
 {
     return view('England');
 })->name('England');
 
-Route::get('/Soviet_Union', function () // 2
+Route::get('/Soviet_Union', function ()
 {
     return view('Soviet_Union');
 
 })->name('Soviet_Union');
 
-Route::get('/Germany', function () // 3
+Route::get('/Germany', function ()
 {
     return view('Germany');
-
 })->name('Germany');
 
 
 Route::get('/Switzerland', function ()
 {
+    session(['selected_country' => 'Switzerland']);
     return view('Switzerland');
 })->name('Switzerland');
 
-Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
+Route::get('/emails/qr/{filename}',[QrCodeController::class,'convertCsvToQr'])
     ->middleware(['auth','verified'])
     ->name('emails.qr');
+Route::post('/emails/qr/{filename}',[QrCodeController::class,'convertCsvToQr'])
+    ->middleware(['auth','verified'])
+    ->name('emails.qr.post');
 Route::get('cart', [CartController::class, 'index'])
     ->middleware(['auth'])
     ->name('cart.index');
@@ -52,6 +55,12 @@ Route::get('orders', [OrderController::class, 'index'])
 Route::get('orders/user_orders', [OrderController::class, 'showByUser'])
     ->middleware(['auth'])
     ->name('orders.user_orders');
+Route::get('orders/send-order', [OrderController::class, 'showSendOrderForm'])
+    ->middleware(['auth'])
+    ->name('orders.send-order-form');
+Route::post('orders/send-email', [OrderController::class, 'sendOrderEmail'])
+    ->middleware(['auth'])
+    ->name('orders.send-email');
 Route::get('weapons/show/{weapon}', [WeaponController::class, 'show'])
     ->middleware(['auth'])
     ->name('weapons.show');
@@ -80,7 +89,6 @@ Route::post('cart/checkout', [CartController::class, 'checkout'])
     ->middleware(['auth'])
     ->name('cart.checkout');
 
-// User Cash Management Routes
 Route::post('user/add-funds', [UserCashController::class, 'addFunds'])
     ->middleware(['auth'])
     ->name('user.add-funds');

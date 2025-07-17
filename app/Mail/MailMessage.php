@@ -28,7 +28,7 @@ class MailMessage extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'WW2',
+            subject: '🎖️ WWII Order Confirmation - QR Code Attached',
         );
     }
 

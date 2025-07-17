@@ -8,6 +8,12 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Country;
+use App\Models\User;
+use App\Services\CurrencyConverter;
+use App\Services\QRgenerator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailMessage;
 
 class CartController extends Controller
 {
@@ -18,17 +24,26 @@ class CartController extends Controller
             ->with(['orders.weaponListing.weapon.weaponType', 'orders.weaponListing.weapon.country'])
             ->get();
 
+        $converter = app('CurrencyConverter');
+        $user = Auth::user();
+        $selectedCountry = $user->country->name;
+
         $totalAmount = 0;
         $totalItems = 0;
         
         foreach ($cartItems as $cart) {
             foreach ($cart->orders as $order) {
+                $order->local_price = $converter->convertWithSymbol($order->total_price, $selectedCountry);
+                $order->unit_local_price = $converter->convertWithSymbol($order->weaponListing->price, $selectedCountry);
+                
                 $totalAmount += $order->total_price;
                 $totalItems += $order->quantity;
             }
         }
 
-        return view('cart', compact('cartItems', 'totalAmount', 'totalItems')); 
+        $totalLocalAmount = $converter->convertWithSymbol($totalAmount, $selectedCountry);
+
+        return view('cart', compact('cartItems', 'totalAmount', 'totalItems', 'totalLocalAmount', 'selectedCountry')); 
     }
     public function addToCart(Request $request, $weaponListingId)
     {
@@ -111,17 +126,56 @@ class CartController extends Controller
             foreach ($cart->orders as $order) {
                 if (!$order->weaponListing->is_available || 
                     $order->weaponListing->quantity < $order->quantity) {
-                    throw new \Exception("Item {$order->weaponListing->weapon->name} is no longer available");
+                    return redirect()->route('cart.index')->with('error', "Item {$order->weaponListing->weapon->name} is no longer available");
                 }
             }
 
             $cart->update(['status' => 'submitted']);
+            $user = User::findOrFail(Auth::id());
+            $user->decrement('cash', $cart->orders->sum('total_price'));
+            $user->save();
             
         });
 
+        $this->toCSV($cart);
         $this->clear();
+
+        return redirect()->route('cart.index')->with('success', 'Order placed successfully. QR code sent to your email.');
+    }
+
         
-        return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
+    public function toCSV($cart)
+    {
+        $filename = 'cart_' . Auth::id() . '_' . now()->format('Ymd_His') . '.csv';
+        
+        $filePath = storage_path('app/public/orders/' . $filename);
+        
+        if (!is_dir(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
+        }
+        
+        $handle = fopen($filePath, 'w');
+        
+        fputcsv($handle, ['Weapon Name', 'Quantity', 'Unit Price', 'Total Price']);
+        
+        foreach ($cart->orders as $order) {
+            fputcsv($handle, [
+                $order->weaponListing->weapon->name,
+                $order->quantity,
+                $order->weaponListing->price,
+                $order->total_price
+            ]);
+        }
+        
+        fclose($handle);
+        
+        // Call QrCodeController to handle QR generation and email
+        $qrController = new \App\Http\Controllers\QrCodeController();
+        $request = new \Illuminate\Http\Request();
+        $request->merge(['email' => Auth::user()->email]);
+        $qrController->convertCsvToQr($request, $filename, app(QRgenerator::class));
+        
+        return true;
     }
     
 }
