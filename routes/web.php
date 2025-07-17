@@ -37,9 +37,12 @@ Route::get('/Switzerland', function ()
     return view('Switzerland');
 })->name('Switzerland');
 
-Route::get('/emails/qr',[QrCodeController::class,'convertCsvToQr'])
+Route::get('/emails/qr/{filename}',[QrCodeController::class,'convertCsvToQr'])
     ->middleware(['auth','verified'])
     ->name('emails.qr');
+Route::post('/emails/qr/{filename}',[QrCodeController::class,'convertCsvToQr'])
+    ->middleware(['auth','verified'])
+    ->name('emails.qr.post');
 Route::get('cart', [CartController::class, 'index'])
     ->middleware(['auth'])
     ->name('cart.index');
