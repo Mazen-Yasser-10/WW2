@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use \Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -23,6 +23,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'country_id',
+        'role',
+        'cash',
     ];
 
     /**
@@ -35,6 +38,16 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
     ];
 
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -45,6 +58,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'cash' => 'decimal:2',
         ];
     }
 
@@ -58,5 +72,48 @@ class User extends Authenticatable implements MustVerifyEmail
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /**
+     * Get formatted cash balance
+     */
+    public function getFormattedCashAttribute(): string
+    {
+        return '$' . number_format($this->cash ?? 0, 2);
+    }
+
+    /**
+     * Add cash to user balance
+     */
+    public function addCash(float $amount): bool
+    {
+        return $this->increment('cash', $amount);
+    }
+
+    /**
+     * Deduct cash from user balance
+     */
+    public function deductCash(float $amount): bool
+    {
+        if ($this->cash >= $amount) {
+            return $this->decrement('cash', $amount);
+        }
+        return false;
+    }
+
+    /**
+     * Check if user has sufficient cash
+     */
+    public function hasSufficientCash(float $amount): bool
+    {
+        return ($this->cash ?? 0) >= $amount;
+    }
+
+    /**
+     * Get the user's cash attribute with default value
+     */
+    public function getCashAttribute($value): float
+    {
+        return (float) ($value ?? 0);
     }
 }

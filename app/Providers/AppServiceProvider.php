@@ -11,7 +11,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton('QrCode', function ($app) {
+            return new \SimpleSoftwareIO\QrCode\Generator();
+        });
+        $this->app->singleton('CurrencyConverter', function ($app) {
+            return new \App\Services\CurrencyConverter();
+        });
     }
 
     /**
