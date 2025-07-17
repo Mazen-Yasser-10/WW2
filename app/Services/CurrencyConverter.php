@@ -11,6 +11,11 @@ class CurrencyConverter
     {
         $this->from_dolar_to_curr =
             [
+                'Germany' => 0.5,
+                'England' => 1.5,
+                'Soviet_Union' => 0.2,
+                'Switzerland' => 1.0
+            ];
             'Germany' => 2.5,
             'England' => 0.25,
             'United Kingdom' => 0.25,
@@ -29,6 +34,10 @@ class CurrencyConverter
 
     public function convert($amount, $country)
     {
+        $converted = $amount * $this->from_dolar_to_curr[$country];
+        return $converted;
+    }
+}
         $country = ucwords(strtolower($country));
         $converted = $amount * ($this->from_dolar_to_curr[$country] ?? $amount);
         return $converted;
