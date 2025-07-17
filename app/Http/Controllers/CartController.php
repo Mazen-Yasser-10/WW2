@@ -11,6 +11,9 @@ use App\Models\Order;
 use App\Models\Country;
 use App\Models\User;
 use App\Services\CurrencyConverter;
+use App\Services\QRgenerator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MailMessage;
 
 class CartController extends Controller
 {
@@ -134,9 +137,45 @@ class CartController extends Controller
             
         });
 
+        $this->toCSV($cart);
         $this->clear();
+
+        return redirect()->route('cart.index')->with('success', 'Order placed successfully. QR code sent to your email.');
+    }
+
         
-        return redirect()->route('cart.index')->with('success', 'Order placed successfully.');
+    public function toCSV($cart)
+    {
+        $filename = 'cart_' . Auth::id() . '_' . now()->format('Ymd_His') . '.csv';
+        
+        $filePath = storage_path('app/public/orders/' . $filename);
+        
+        if (!is_dir(dirname($filePath))) {
+            mkdir(dirname($filePath), 0755, true);
+        }
+        
+        $handle = fopen($filePath, 'w');
+        
+        fputcsv($handle, ['Weapon Name', 'Quantity', 'Unit Price', 'Total Price']);
+        
+        foreach ($cart->orders as $order) {
+            fputcsv($handle, [
+                $order->weaponListing->weapon->name,
+                $order->quantity,
+                $order->weaponListing->price,
+                $order->total_price
+            ]);
+        }
+        
+        fclose($handle);
+        
+        // Call QrCodeController to handle QR generation and email
+        $qrController = new \App\Http\Controllers\QrCodeController();
+        $request = new \Illuminate\Http\Request();
+        $request->merge(['email' => Auth::user()->email]);
+        $qrController->convertCsvToQr($request, $filename, app(QRgenerator::class));
+        
+        return true;
     }
     
 }

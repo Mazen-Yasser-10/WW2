@@ -10,12 +10,12 @@ use Illuminate\Http\Request;
 
 class QrCodeController extends Controller
 {
-    public function convertCsvToQr(Request $request, QRgenerator $qrgenerator)
+    public function convertCsvToQr(Request $request, $filename,QRgenerator $qrgenerator)
     {
-        $path = storage_path('app/public/stock.csv');
+        $path = storage_path('app/public/orders/' . $filename);
         $qrCodeUrl = $qrgenerator->fromCsv($path);
         Mail::to($request->email)->send(new MailMessage($qrCodeUrl));
         Storage::disk('public')->delete('qrcode.png');
-        return "QR code generated and sent via email successfully!";
+        return redirect()->back()->with('success', 'QR Code sent to your email successfully.');
     }
 }
