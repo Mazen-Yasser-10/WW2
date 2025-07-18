@@ -132,11 +132,7 @@
                             <div class="p-6">
                                 <div class="flex items-center justify-between mb-4">
                                     <h3 class="text-xl font-bold text-white">{{ $weapon->weapon->name }}</h3>
-                                    <div class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                        </svg>
-                                    </div>
+                                    <img src="{{ $weapon->country->image }}" alt="{{ $weapon->weapon->name }}" class="w-10 h-10 rounded-full">
                                 </div>
                                 
                                 <div class="space-y-3 mb-4">
