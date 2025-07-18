@@ -32,20 +32,12 @@
                     </div>
                 </div>
                 <div class="flex space-x-3">
-                    @auth
+                    @if(in_array(auth()->user()->role, ['admin', 'government']))
                         <flux:button variant="outline" href="{{ route('orders.send-order-form') }}" class="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 3.26a2 2 0 001.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                             </svg>
                             Send Order
-                        </flux:button>
-                    @endauth
-                    @if(auth()->user()->role === 'admin')
-                        <flux:button variant="primary" href="{{ route('weapons.create') }}" class="bg-green-600 hover:bg-green-700">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Add New Weapon
                         </flux:button>
                     @endif
                 </div>
@@ -107,7 +99,7 @@
                     </form>
                 </div>
                 
-                @if(auth()->user()->role === 'general')
+                @if(in_array(auth()->user()->role, ['admin', 'government']))
                     <div class="mt-4">
                         <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
                             <div class="flex items-center justify-between">
@@ -195,7 +187,7 @@
                                     <a href="{{ route('weapons.show', $weapon) }}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-center">
                                         View Details
                                     </a>
-                                    @if(auth()->user()->role === 'government')
+                                    @if(in_array(auth()->user()->role, ['admin', 'government']))
                                         <a href="{{ route('weapons.edit', $weapon) }}" class="bg-gray-600 hover:bg-gray-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200">
                                             Edit
                                         </a>

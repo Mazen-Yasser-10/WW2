@@ -1,8 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" {{ $attributes }}>
+    <!-- Military Shield with Crossed Weapons -->
     <path 
         fill="currentColor" 
         fill-rule="evenodd" 
         clip-rule="evenodd"
-        d="M17.2 5.633 8.6.855 0 5.633v26.51l16.2 9 16.2-9v-8.442l7.6-4.223V9.856l-8.6-4.777-8.6 4.777V18.3l-5.6 3.111V5.633ZM38 18.301l-5.6 3.11v-6.157l5.6-3.11V18.3Zm-1.06-7.856-5.54 3.078-5.54-3.079 5.54-3.078 5.54 3.079ZM24.8 18.3v-6.157l5.6 3.111v6.158L24.8 18.3Zm-1 1.732 5.54 3.078-13.14 7.302-5.54-3.078 13.14-7.3v-.002Zm-16.2 7.89 7.6 4.222V38.3L2 30.966V7.92l5.6 3.111v16.892ZM8.6 9.3 3.06 6.222 8.6 3.143l5.54 3.08L8.6 9.3Zm21.8 15.51-13.2 7.334V38.3l13.2-7.334v-6.156ZM9.6 11.034l5.6-3.11v14.6l-5.6 3.11v-14.6Z"
+        d="M20 2 L8 6 L8 16 C8 26 20 38 20 38 C20 38 32 26 32 16 L32 6 L20 2 Z M10 7.5 L20 4.5 L30 7.5 L30 16 C30 24 20 34 20 34 C20 34 10 24 10 16 L10 7.5 Z"
+    />
+    <!-- Crossed Rifles -->
+    <path 
+        fill="currentColor" 
+        d="M14 12 L26 24 M26 12 L14 24"
+        stroke="currentColor" 
+        stroke-width="1.5" 
+        stroke-linecap="round"
+    />
+    <!-- Military Star -->
+    <path 
+        fill="currentColor" 
+        d="M20 10 L21.5 15 L26 15 L22.5 18 L24 23 L20 20 L16 23 L17.5 18 L14 15 L18.5 15 Z"
     />
 </svg>

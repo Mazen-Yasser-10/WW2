@@ -55,27 +55,37 @@ Route::get('orders', [OrderController::class, 'index'])
 Route::get('orders/user_orders', [OrderController::class, 'showByUser'])
     ->middleware(['auth', 'verified'])
     ->name('orders.user_orders');
-Route::get('orders/send-order', [OrderController::class, 'showSendOrderForm'])
-    ->middleware(['auth', 'verified'])
-    ->name('orders.send-order-form');
-Route::post('orders/send-email', [OrderController::class, 'sendOrderEmail'])
-    ->middleware(['auth', 'verified'])
-    ->name('orders.send-email');
+
+// Routes requiring admin or government access
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('orders/send-order', [OrderController::class, 'showSendOrderForm'])
+        ->middleware('admin.or.government')
+        ->name('orders.send-order-form');
+    
+    Route::post('orders/send-email', [OrderController::class, 'sendOrderEmail'])
+        ->middleware('admin.or.government')
+        ->name('orders.send-email');
+    
+    Route::get('weapons/create', [WeaponController::class, 'create'])
+        ->middleware('admin.or.government')
+        ->name('weapons.create');
+    
+    Route::post('weapons/store', [WeaponController::class, 'store'])
+        ->middleware('admin.or.government')
+        ->name('weapons.store');
+    
+    Route::get('weapons/{weapon}/edit', [WeaponController::class, 'edit'])
+        ->middleware('admin.or.government')
+        ->name('weapons.edit');
+    
+    Route::put('weapons/{weapon}', [WeaponController::class, 'update'])
+        ->middleware('admin.or.government')
+        ->name('weapons.update');
+});
+
 Route::get('weapons/show/{weapon}', [WeaponController::class, 'show'])
     ->middleware(['auth', 'verified'])
     ->name('weapons.show');
-Route::get('weapons/create', [WeaponController::class, 'create'])
-    ->middleware(['auth', 'verified'])
-    ->name('weapons.create');
-Route::post('weapons/store', [WeaponController::class, 'store'])
-    ->middleware(['auth', 'verified'])
-    ->name('weapons.store');
-Route::get('weapons/{weapon}/edit', [WeaponController::class, 'edit'])
-    ->middleware(['auth', 'verified'])
-    ->name('weapons.edit');
-Route::put('weapons/{weapon}', [WeaponController::class, 'update'])
-    ->middleware(['auth', 'verified'])
-    ->name('weapons.update');
 Route::post('carts/add/{weapon}', [CartController::class, 'addToCart'])
     ->middleware(['auth', 'verified'])
     ->name('cart.add');
