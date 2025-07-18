@@ -77,9 +77,14 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Get formatted cash balance
      */
-    public function getFormattedCashAttribute(): string
+    public function getFormattedCashAttribute($symbol): string
     {
-        return '$' . number_format($this->cash ?? 0, 2);
+        if($symbol === '£') {
+            return $symbol . number_format($this->cash ?? 0, 2);
+        } else {
+            return number_format($this->cash ?? 0, 2) . $symbol;
+        }
+           
     }
 
     /**

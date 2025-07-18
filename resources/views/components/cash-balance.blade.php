@@ -1,18 +1,20 @@
 <div class="inline-flex items-center bg-gradient-to-r from-green-800 to-green-900 rounded-xl px-4 py-2 border border-green-700 shadow-lg">
     <div class="flex items-center space-x-3">
-        <!-- Cash Icon -->
+        <!-- Currency Symbol -->
         <div class="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-            </svg>
+            @php
+                $converter = new \App\Services\CurrencyConverter();
+                $symbol = $converter->getCurrencySymbol(auth()->user()->country->name);
+            @endphp
+            <span class="text-white text-lg">{{ $symbol }}</span>
         </div>
         
         <!-- Balance Info -->
         <div class="flex flex-col">
             <span class="text-xs text-green-300 font-medium">War Funds</span>
-            <span class="text-lg font-bold text-white">{{ auth()->user()->formatted_cash }}</span>
+            <span class="text-lg font-bold text-white">{{ auth()->user()->getFormattedCashAttribute($symbol) }}</span>
             @if(auth()->user()->country)
-                <span class="text-xs text-green-400">{{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England']) ? auth()->user()->country->name : 'United States' }} Currency</span>
+                <span class="text-xs text-green-400">{{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England','United Kingdom']) ? auth()->user()->country->name : 'United States' }} Currency</span>
             @endif
         </div>
         
@@ -36,7 +38,7 @@
             <h3 class="text-xl font-bold text-white mb-2">💰 Add War Funds</h3>
             <p class="text-gray-400 text-sm">Increase your operational budget
                 @if(auth()->user()->country)
-                    ({{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England']) ? auth()->user()->country->name : 'United States' }} Currency)
+                    ({{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England','United Kingdom']) ? auth()->user()->country->name : 'United States' }} Currency)
                 @endif
             </p>
         </div>
@@ -47,7 +49,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-300 mb-2">
                         Amount @if(auth()->user()->country && auth()->user()->country->currency)
-                            ({{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England']) ? auth()->user()->country->name : 'United States' }} Currency)
+                            ({{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England','United Kingdom']) ? auth()->user()->country->name : 'United States' }} Currency)
                         @else
                             ($)
                         @endif
@@ -56,7 +58,7 @@
                            name="amount" 
                            step="0.01" 
                            min="1" 
-                           max="10000" 
+                           max="100000" 
                            required 
                            placeholder="Enter amount..."
                            class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200">
