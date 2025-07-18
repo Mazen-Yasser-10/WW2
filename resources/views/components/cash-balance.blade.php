@@ -11,6 +11,9 @@
         <div class="flex flex-col">
             <span class="text-xs text-green-300 font-medium">War Funds</span>
             <span class="text-lg font-bold text-white">{{ auth()->user()->formatted_cash }}</span>
+            @if(auth()->user()->country)
+                <span class="text-xs text-green-400">{{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England']) ? auth()->user()->country->name : 'United States' }} Currency</span>
+            @endif
         </div>
         
         <!-- Quick Actions -->
@@ -31,14 +34,24 @@
     <div class="bg-gray-800 rounded-2xl border border-gray-700 p-6 w-full max-w-sm mx-auto shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
         <div class="text-center mb-6">
             <h3 class="text-xl font-bold text-white mb-2">💰 Add War Funds</h3>
-            <p class="text-gray-400 text-sm">Increase your operational budget</p>
+            <p class="text-gray-400 text-sm">Increase your operational budget
+                @if(auth()->user()->country)
+                    ({{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England']) ? auth()->user()->country->name : 'United States' }} Currency)
+                @endif
+            </p>
         </div>
         
         <form action="{{ route('user.add-funds') }}" method="POST">
             @csrf
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-2">Amount ($)</label>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">
+                        Amount @if(auth()->user()->country && auth()->user()->country->currency)
+                            ({{ in_array(auth()->user()->country->name, ['Switzerland', 'Germany', 'Soviet Union', 'England']) ? auth()->user()->country->name : 'United States' }} Currency)
+                        @else
+                            ($)
+                        @endif
+                    </label>
                     <input type="number" 
                            name="amount" 
                            step="0.01" 
@@ -51,10 +64,22 @@
                 
                 <!-- Quick Amount Buttons -->
                 <div class="grid grid-cols-4 gap-2">
-                    <button type="button" onclick="setAmount(100)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$100</button>
-                    <button type="button" onclick="setAmount(500)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$500</button>
-                    <button type="button" onclick="setAmount(1000)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$1K</button>
-                    <button type="button" onclick="setAmount(5000)" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">$5K</button>
+                    @php
+                        $converter = new \App\Services\CurrencyConverter();
+                        $country = auth()->user()->country->name;
+                        $amounts = [100, 500, 1000, 5000];
+                    @endphp
+                    @foreach($amounts as $amount)
+                        @php
+                            $convertedAmount = $converter->convert($amount, $country);
+                            $symbol = $converter->getCurrencySymbol($country);
+                            $displayText = $amount >= 1000 ? 
+                                ($symbol === '£' ? $symbol . ($convertedAmount >= 1000 ? number_format($convertedAmount/1000, 1) . 'K' : $convertedAmount) : 
+                                ($convertedAmount >= 1000 ? number_format($convertedAmount/1000, 1) . 'K' : $convertedAmount) . ' ' . $symbol) :
+                                ($symbol === '£' ? $symbol . $convertedAmount : $convertedAmount . ' ' . $symbol);
+                        @endphp
+                        <button type="button" onclick="setAmount({{ $convertedAmount }})" class="px-0 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm transition-colors">{{ $displayText }}</button>
+                    @endforeach
                 </div>
             </div>
             

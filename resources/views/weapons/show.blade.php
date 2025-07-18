@@ -235,7 +235,35 @@
                                     const quantity = this.value;
                                     const unitPrice = {{ $weapon->price }};
                                     const totalPrice = quantity * unitPrice;
-                                    document.getElementById('totalPrice').textContent = '$' + totalPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                                    
+                                    @php
+                                        $converter = new \App\Services\CurrencyConverter();
+                                        $userCountry = auth()->user()->country->name;
+                                        $conversionRate = $converter->convert(1, $userCountry);
+                                        $currencySymbol = $converter->getCurrencySymbol($userCountry);
+                                        $isUKCurrency = $userCountry && in_array($userCountry, ['England', 'United Kingdom']);
+                                    @endphp
+                                    
+                                    // Apply currency conversion
+                                    const convertedPrice = totalPrice * {{ $conversionRate }};
+                                    const currencySymbol = '{{ $currencySymbol }}';
+                                    const isUKCurrency = {{ $isUKCurrency ? 'true' : 'false' }};
+                                    
+                                    // Format according to currency rules (UK currencies show symbol before, others after)
+                                    let formattedPrice;
+                                    if (isUKCurrency) {
+                                        formattedPrice = currencySymbol + convertedPrice.toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                    } else {
+                                        formattedPrice = convertedPrice.toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        }) + ' ' + currencySymbol;
+                                    }
+                                    
+                                    document.getElementById('totalPrice').textContent = formattedPrice;
                                 });
                             </script>
                         @else

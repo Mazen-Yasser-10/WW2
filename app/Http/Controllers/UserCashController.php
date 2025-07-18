@@ -18,7 +18,10 @@ class UserCashController extends Controller
 
         $user->cash = $user->cash  + $amount;
         $user->save();
+        $selectedCountry = $user->country->name;
+        $converter = app('CurrencyConverter');
+        $user->local_cash = $converter->convertWithSymbol($user->cash, $selectedCountry);
 
-        return redirect()->back()->with('success', 'War funds added successfully! +$' . number_format($amount, 2));
+        return redirect()->back()->with('success', 'War funds added successfully! +' . $user->local_cash);
     }
 }

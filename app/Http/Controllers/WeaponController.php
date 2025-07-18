@@ -57,9 +57,8 @@ class WeaponController extends Controller
         $user = Auth::user();
         $selectedCountry = $user->country->name;
         $weapon->local_price = $converter->convertWithSymbol($weapon->price, $selectedCountry);
-        $weapon->currency_symbol = $converter->getCurrencySymbol($selectedCountry);
-
-        return view('weapons.show', compact('weapon', 'selectedCountry'));
+        $weapon->priceOnly = $converter->convert($weapon->price, $selectedCountry);
+        return view('weapons.show', compact('weapon', 'selectedCountry', 'converter'));
     }
 
     public function create()

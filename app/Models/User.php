@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use \Illuminate\Contracts\Auth\MustVerifyEmail;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -79,6 +79,11 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getFormattedCashAttribute(): string
     {
+        if ($this->country) {
+            $converter = new \App\Services\CurrencyConverter();
+            return $converter->convertWithSymbol($this->cash ?? 0, $this->country->name);
+        }
+        
         return '$' . number_format($this->cash ?? 0, 2);
     }
 
@@ -89,18 +94,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->increment('cash', $amount);
     }
-
-    /**
-     * Deduct cash from user balance
-     */
-    public function deductCash(float $amount): bool
-    {
-        if ($this->cash >= $amount) {
-            return $this->decrement('cash', $amount);
-        }
-        return false;
-    }
-
     /**
      * Check if user has sufficient cash
      */
