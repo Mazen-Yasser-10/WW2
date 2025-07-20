@@ -7,6 +7,9 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\WeaponController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserCashController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', function ()
 {
@@ -36,6 +39,19 @@ Route::get('/Switzerland', function ()
     session(['selected_country' => 'Switzerland']);
     return view('Switzerland');
 })->name('Switzerland');
+
+Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
+    ->middleware(['auth', 'signed'])
+    ->name('verification.verify');
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::post('/email/verification-notification', function (EmailVerificationRequest $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('status', 'verification-link-sent');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/emails/qr/{filename}',[QrCodeController::class,'convertCsvToQr'])
     ->middleware(['auth','verified'])
