@@ -44,10 +44,6 @@ Route::get('/email/verify/{id}/{hash}', VerifyEmailController::class)
     ->middleware(['auth', 'signed'])
     ->name('verification.verify');
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-
 Route::post('/email/verification-notification', function (EmailVerificationRequest $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('status', 'verification-link-sent');
