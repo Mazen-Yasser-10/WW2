@@ -9,7 +9,7 @@ The site features a modern user interface, dynamic product listings, and basic s
 [ View Website](https://ww2.up.railway.app/)
 
 ---
-## ✨ Features
+##  Features
 
 - Responsive design for mobile and desktop
 - Dynamic product catalog with real-time updates
