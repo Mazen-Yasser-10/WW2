@@ -9,6 +9,10 @@ The site features a modern user interface, dynamic product listings, and basic s
 [ View Website](https://ww2.up.railway.app/)
 
 ---
+## Document
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Mazen-Yasser-10/WW2)
+
+---
 ##  Features
 
 - Responsive design for mobile and desktop
