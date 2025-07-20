@@ -149,7 +149,7 @@
 
                             <!-- Action Buttons -->
                             <div class="space-y-3">
-                                <form action="{{ route('cart.checkout') }}" method="POST" class="w-full">
+                                <form action="{{ route('cart.checkout') }}" method="GET" class="w-full">
                                     @csrf
                                     <button type="submit" 
                                             class="w-full bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-4 rounded-xl hover:from-green-700 hover:to-green-800 transition-all duration-200 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">

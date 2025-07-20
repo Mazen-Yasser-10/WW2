@@ -112,7 +112,7 @@ class CartController extends Controller
         
         return redirect()->route('cart.index')->with('success', 'Cart cleared successfully.');  
     }
-    public function checkout(Request $request)
+    public function checkout()
     {
         $cart = Cart::where('user_id', Auth::id())
             ->where('status', 'open')
@@ -123,12 +123,6 @@ class CartController extends Controller
         }
 
         DB::transaction(function () use ($cart) {
-            foreach ($cart->orders as $order) {
-                if (!$order->weaponListing->is_available || 
-                    $order->weaponListing->quantity < $order->quantity) {
-                    return redirect()->route('cart.index')->with('error', "Item {$order->weaponListing->weapon->name} is no longer available");
-                }
-            }
 
             $cart->update(['status' => 'submitted']);
             $user = User::findOrFail(Auth::id());
@@ -169,7 +163,6 @@ class CartController extends Controller
         
         fclose($handle);
         
-        // Call QrCodeController to handle QR generation and email
         $qrController = new \App\Http\Controllers\QrCodeController();
         $request = new \Illuminate\Http\Request();
         $request->merge(['email' => Auth::user()->email]);

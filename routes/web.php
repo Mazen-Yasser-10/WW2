@@ -95,7 +95,7 @@ Route::delete('cart/remove/{order}', [CartController::class, 'remove'])
 Route::delete('cart/clear', [CartController::class, 'clear'])
     ->middleware(['auth', 'verified'])
     ->name('cart.clear');
-Route::post('cart/checkout', [CartController::class, 'checkout'])
+Route::get('cart/checkout', [CartController::class, 'checkout'])
     ->middleware(['auth', 'verified'])
     ->name('cart.checkout');
 
