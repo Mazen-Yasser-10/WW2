@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Germany in World War II </title>
     <style>
-    body
-    {
-    background-image: url('https://i.ibb.co/0jKmKB0R/premium-photo-1661901234139-d833950e05e0.jpg');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    font-family: Arial, sans-serif;
-    color: #333;
-    line-height: 1.6;
-    padding: 20px;
-    margin: 0;
-    min-height: 100vh;
-    }
+        body
+        {
+            background-image: url('https://i.ibb.co/0jKmKB0R/premium-photo-1661901234139-d833950e05e0.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+            min-height: 100vh;
+        }
 
-    .container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: rgba(255, 255, 255, 0.85);
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
 
-    h1
-    {
-    color: #2c3e50;
-    text-align: center;
-    border-bottom: 2px solid #2c3e50;
-    padding-bottom: 10px;
-    }
+        h1
+        {
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            padding-bottom: 10px;
+        }
     </style>
     <title>England in World War II</title>
 </head>
