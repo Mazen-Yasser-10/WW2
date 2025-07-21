@@ -168,7 +168,6 @@ class CartController extends Controller
         $request->merge(['email' => Auth::user()->email]);
         $qrController->convertCsvToQr($request, $filename, app(QRgenerator::class));
         
-        return true;
     }
     
 }
